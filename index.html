@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEUROSTACK | Engineering the Future</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #0a0a0a; font-family: 'Inter', sans-serif; }
+        canvas { display: block; }
+
+        /* UI 레이어 */
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            pointer-events: none; /* 마우스 이벤트가 Three.js에 전달되도록 함 */
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 5rem;
+            letter-spacing: 15px;
+            margin: 0;
+            color: #FF8C00; /* 메인 오렌지 */
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        .header {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 20;
+            color: #FF8C00;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">NEUROSTACK</div>
+    <div class="overlay">
+        <h1>NEUROSTACK</h1>
+        <p>SMARTLY CREATING A NEW WORLD</p>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 1. Scene 설정
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 2. 파티클 및 노드 생성
+        const particleCount = 150;
+        const positions = new Float32Array(particleCount * 3);
+        const particles = new THREE.BufferGeometry();
+        const particleArray = [];
+
+        for (let i = 0; i < particleCount; i++) {
+            const x = (Math.random() - 0.5) * 10;
+            const y = (Math.random() - 0.5) * 10;
+            const z = (Math.random() - 0.5) * 10;
+            
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
+
+            particleArray.push({
+                pos: new THREE.Vector3(x, y, z),
+                velocity: new THREE.Vector3((Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.01)
+            });
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        // 점(Node) 디자인
+        const pMaterial = new THREE.PointsMaterial({
+            color: 0xFF8C00,
+            size: 0.05,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particleSystem = new THREE.Points(particles, pMaterial);
+        scene.add(particleSystem);
+
+        // 선(Connection) 디자인
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xFF8C00, transparent: true, opacity: 0.2 });
+        
+        camera.position.z = 5;
+
+        // 마우스 상호작용
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) / 100;
+            mouseY = (e.clientY - window.innerHeight / 2) / 100;
+        });
+
+        // 3. 애니메이션 루프
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 카메라 미세 움직임
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            // 파티클 위치 업데이트 및 선 그리기 (매 프레임 갱신)
+            const currentPositions = particles.attributes.position.array;
+            
+            // 기존 선 제거 루틴 (성능을 위해 단순화된 연결 방식 권장)
+            // 여기서는 개념 구현을 위해 파티클 회전만 추가
+            particleSystem.rotation.y += 0.001;
+            particleSystem.rotation.x += 0.0005;
+
+            renderer.render(scene, camera);
+        }
+
+        // 반응형 리사이즈
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
