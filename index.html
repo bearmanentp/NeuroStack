@@ -3,149 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEUROSTACK | Engineering the Future</title>
+    <title>NEUROSTACK | Engineering & Vision</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #0a0a0a; font-family: 'Inter', sans-serif; }
-        canvas { display: block; }
+        :root { --orange: #FF8C00; --dark: #0a0a0a; }
+        body { margin: 0; background-color: var(--dark); color: white; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+        
+        /* Three.js 배경 */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* UI 레이어 */
-        .overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            pointer-events: none; /* 마우스 이벤트가 Three.js에 전달되도록 함 */
-            z-index: 10;
+        /* 공통 레이아웃 */
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 20px; box-sizing: border-box; }
+        .container { max-width: 1200px; width: 100%; }
+
+        /* 히어로 섹션 */
+        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); letter-spacing: 15px; color: var(--orange); margin: 0; text-shadow: 0 0 30px rgba(255, 140, 0, 0.4); }
+        .hero p { font-size: 1.2rem; opacity: 0.7; letter-spacing: 5px; }
+
+        /* 대표 소개 섹션 */
+        .ceo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--orange);
+            padding: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            backdrop-filter: blur(10px);
+            transform: scale(0.8); opacity: 0;
         }
+        .ceo-image { width: 150px; height: 150px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
 
-        h1 {
-            font-size: 5rem;
-            letter-spacing: 15px;
-            margin: 0;
-            color: #FF8C00; /* 메인 오렌지 */
-            text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+        /* 프로젝트 카드 섹션 */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
         }
-
-        p {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            opacity: 0.8;
-            margin-top: 10px;
+        .card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(200px) translateZ(-500px); /* 초기 상태: 뒤쪽 아래 */
+            opacity: 0;
         }
-
-        .header {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            z-index: 20;
-            color: #FF8C00;
+        .card:hover { border-color: var(--orange); box-shadow: 0 0 25px rgba(255, 140, 0, 0.4); transform: translateY(-10px) !important; }
+        .card h3 { color: var(--orange); margin-top: 0; }
+        .btn-roblox {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--orange);
+            color: black;
+            text-decoration: none;
             font-weight: bold;
-            font-size: 1.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
+
+        .scroll-down { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; opacity: 0.5; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);} 40% {transform: translateY(-10px) translateX(-50%);} 60% {transform: translateY(-5px) translateX(-50%);} }
     </style>
 </head>
 <body>
 
-    <div class="header">NEUROSTACK</div>
-    <div class="overlay">
+    <canvas id="bg-canvas"></canvas>
+
+    <section class="hero">
         <h1>NEUROSTACK</h1>
-        <p>SMARTLY CREATING A NEW WORLD</p>
-    </div>
+        <p>ENGINEERING TOMORROW</p>
+        <div class="scroll-down">SCROLL DOWN ↓</div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="ceo-card">
+                <div class="ceo-image">🐻</div>
+                <div>
+                    <h2 style="color: var(--orange); margin: 0;">대표: 정상인 곰돌맨</h2>
+                    <p>"누구보다 스마트하게, 공학으로 세상을 재구성합니다."</p>
+                    <p style="font-size: 0.9rem; opacity: 0.6;">뉴로스택의 비전을 이끄는 리더로서, 기술의 끝단에서 새로운 표준을 창조합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px; font-size: 2.5rem;">OUR PROJECTS</h2>
+            <div class="project-grid">
+                <div class="card">
+                    <h3>프로젝트 알파</h3>
+                    <p>로블록스 내에서 구현된 고도화된 공학 시뮬레이션 게임입니다.</p>
+                    <a href="https://www.roblox.com/games/YOUR_GAME_ID_1" target="_blank" class="btn-roblox">ROBLOX PLAY →</a>
+                </div>
+                <div class="card">
+                    <h3>뉴로 메타버스</h3>
+                    <p>스마트한 인터랙션이 가능한 차세대 소셜 플랫폼.</p>
+                    <a href="https://www.roblox.com/games/YOUR_GAME_ID_2" target="_blank" class="btn-roblox">ROBLOX PLAY →</a>
+                </div>
+                <div class="card">
+                    <h3>인텔리전트 런</h3>
+                    <p>공학적 사고력을 필요로 하는 두뇌 퍼즐 러닝 게임.</p>
+                    <a href="https://www.roblox.com/games/YOUR_GAME_ID_3" target="_blank" class="btn-roblox">ROBLOX PLAY →</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-            }
-        }
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
     </script>
 
     <script type="module">
         import * as THREE from 'three';
 
-        // 1. Scene 설정
+        // --- Three.js 배경 로직 ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
 
-        // 2. 파티클 및 노드 생성
-        const particleCount = 150;
-        const positions = new Float32Array(particleCount * 3);
         const particles = new THREE.BufferGeometry();
-        const particleArray = [];
-
-        for (let i = 0; i < particleCount; i++) {
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
-            const z = (Math.random() - 0.5) * 10;
-            
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
-
-            particleArray.push({
-                pos: new THREE.Vector3(x, y, z),
-                velocity: new THREE.Vector3((Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.01)
-            });
-        }
-
-        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        // 점(Node) 디자인
-        const pMaterial = new THREE.PointsMaterial({
-            color: 0xFF8C00,
-            size: 0.05,
-            transparent: true,
-            opacity: 0.8
-        });
-
-        const particleSystem = new THREE.Points(particles, pMaterial);
-        scene.add(particleSystem);
-
-        // 선(Connection) 디자인
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xFF8C00, transparent: true, opacity: 0.2 });
+        const pCount = 500;
+        const posArray = new Float32Array(pCount * 3);
+        for(let i=0; i<pCount*3; i++) posArray[i] = (Math.random() - 0.5) * 15;
+        particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         
+        const material = new THREE.PointsMaterial({ size: 0.02, color: 0xFF8C00 });
+        const starField = new THREE.Points(particles, material);
+        scene.add(starField);
         camera.position.z = 5;
 
-        // 마우스 상호작용
-        let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) / 100;
-            mouseY = (e.clientY - window.innerHeight / 2) / 100;
-        });
-
-        // 3. 애니메이션 루프
         function animate() {
             requestAnimationFrame(animate);
-
-            // 카메라 미세 움직임
-            camera.position.x += (mouseX - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            // 파티클 위치 업데이트 및 선 그리기 (매 프레임 갱신)
-            const currentPositions = particles.attributes.position.array;
-            
-            // 기존 선 제거 루틴 (성능을 위해 단순화된 연결 방식 권장)
-            // 여기서는 개념 구현을 위해 파티클 회전만 추가
-            particleSystem.rotation.y += 0.001;
-            particleSystem.rotation.x += 0.0005;
-
+            starField.rotation.y += 0.001;
             renderer.render(scene, camera);
         }
+        animate();
 
-        // 반응형 리사이즈
+        // --- GSAP 애니메이션 (카드 슝 날라오는 효과) ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 대표 카드 등장
+        gsap.to(".ceo-card", {
+            scrollTrigger: { trigger: ".ceo-card", start: "top 80%" },
+            scale: 1, opacity: 1, duration: 1.2, ease: "power4.out"
+        });
+
+        // 프로젝트 카드들이 순차적으로 슝 날아옴
+        gsap.to(".card", {
+            scrollTrigger: {
+                trigger: ".project-grid",
+                start: "top 70%",
+            },
+            y: 0,
+            z: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: 0.2, // 카드 하나씩 순서대로
+            ease: "back.out(1.7)" // 약간 튕기는 효과
+        });
+
+        // 리사이즈 대응
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        animate();
     </script>
 </body>
 </html>
