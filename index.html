@@ -165,12 +165,19 @@
         function animate() {
             requestAnimationFrame(animate);
             
-            targetX += (mouseX - targetX) * 0.05;
-            targetY += (mouseY - targetY) * 0.05;
+            // 1. 마우스 반응 속도 조절 (0.05 -> 0.02로 낮춤)
+            // 숫자가 작을수록 마우스를 따라오는 움직임이 더 묵직하고 느려집니다.
+            targetX += (mouseX - targetX) * 0.02;
+            targetY += (mouseY - targetY) * 0.02;
 
-            points.rotation.y += 0.001;
-            points.rotation.x += targetY * 0.02;
-            points.rotation.y += targetX * 0.02;
+            // 2. 기본 자전 속도 조절 (0.001 -> 0.0003으로 낮춤)
+            // 가만히 있어도 배경이 스스로 회전하는 속도입니다.
+            points.rotation.y += 0.0003; 
+
+            // 3. 마우스 이동에 따른 회전 민감도 조절 (0.02 -> 0.005로 낮춤)
+            // 숫자가 작을수록 마우스를 크게 움직여도 배경이 조금만 움직입니다.
+            points.rotation.x += targetY * 0.005;
+            points.rotation.y += targetX * 0.005;
 
             renderer.render(scene, camera);
         }
