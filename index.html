@@ -3,136 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEUROSTACK | 뉴로스택</title>
+    <title>NEUROSTACK | Engineering & Vision</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        :root { --orange: #FF8C00; --dark: #050505; --gray: #1a1a1a; }
+        :root { --orange: #FF8C00; --dark: #000000; --card-bg: rgba(20, 20, 20, 0.9); }
         body { margin: 0; background-color: var(--dark); color: white; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        
+        /* Three.js 캔버스를 배경으로 고정 */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
 
         /* 네비게이션 */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-sizing: border-box; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--orange); letter-spacing: 2px; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 30px; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--orange); }
+        nav { position: fixed; top: 0; width: 100%; padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-sizing: border-box; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--orange); letter-spacing: 4px; text-transform: uppercase; }
 
         section { min-height: 100vh; padding: 100px 10%; display: flex; flex-direction: column; justify-content: center; position: relative; }
 
         /* 히어로 섹션 */
         .hero { align-items: center; text-align: center; }
-        .hero h1 { font-size: 8vw; margin: 0; color: var(--orange); line-height: 1; filter: drop-shadow(0 0 20px rgba(255,140,0,0.5)); }
-        .hero p { font-size: 1.5rem; letter-spacing: 5px; opacity: 0.8; margin-top: 20px; }
+        .hero h1 { font-size: 9vw; margin: 0; color: var(--orange); text-shadow: 0 0 50px rgba(255,140,0,0.7); line-height: 0.9; }
+        .hero p { font-size: 1.5rem; letter-spacing: 8px; opacity: 0.7; margin-top: 20px; text-transform: uppercase; }
 
-        /* 공학 팀 소개 (Vision) */
-        .vision-content { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        .vision-img { width: 100%; height: 400px; border-radius: 20px; overflow: hidden; border: 1px solid var(--orange); }
-        .vision-img img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* 프로젝트 카드 */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-        .card { 
-            background: var(--gray); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,140,0,0.1);
-            position: relative; overflow: hidden; transition: 0.5s; cursor: pointer;
+        /* 대표 소개 카드 */
+        .ceo-container { display: flex; align-items: center; justify-content: center; gap: 50px; perspective: 1000px; }
+        .ceo-card { 
+            background: var(--card-bg); border: 2px solid var(--orange); border-radius: 30px; padding: 40px; 
+            display: flex; align-items: center; gap: 30px; box-shadow: 0 0 30px rgba(255,140,0,0.2);
+            opacity: 0; transform: rotateY(-20deg) translateZ(-200px);
         }
-        .card:hover { transform: translateY(-15px); border-color: var(--orange); box-shadow: 0 10px 40px rgba(255,140,0,0.2); }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; }
-        .card h3 { color: var(--orange); margin: 10px 0; }
-        .card-btn { background: var(--orange); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block; font-weight: bold; margin-top: 15px; }
+        .ceo-img { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--orange); object-fit: cover; }
 
-        /* CEO 섹션 */
-        .ceo-section { text-align: center; }
-        .ceo-circle { width: 200px; height: 200px; border-radius: 50%; border: 5px solid var(--orange); margin: 0 auto 30px; overflow: hidden; background: #222; }
-        .ceo-circle img { width: 100%; height: 100%; object-fit: cover; }
+        /* 프로젝트 카드 그리드 */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 60px; }
+        .project-card { 
+            background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1);
+            position: relative; overflow: hidden; opacity: 0; transform: scale(0.5) translateY(100px);
+        }
+        .project-card:hover { border-color: var(--orange); box-shadow: 0 0 40px rgba(255,140,0,0.4); }
+        .project-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 15px; margin-bottom: 20px; transition: 0.5s; }
+        .project-card:hover img { transform: scale(1.05); }
+        .card-btn { background: var(--orange); color: black; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        .card-btn:hover { background: white; box-shadow: 0 0 20px white; }
 
-        /* 디스코드 인사이트 */
-        .discord-section { align-items: center; }
-        .discord-widget { width: 100%; max-width: 800px; background: #2f3136; border-radius: 15px; overflow: hidden; border: 1px solid #5865f2; }
+        /* 디스코드 섹션 */
+        .discord-box { width: 100%; max-width: 1000px; margin: 0 auto; border-radius: 25px; overflow: hidden; border: 2px solid #5865f2; opacity: 0; transform: translateY(50px); }
 
-        footer { padding: 50px; text-align: center; border-top: 1px solid #333; opacity: 0.5; }
-
-        .reveal { opacity: 0; transform: translateY(50px); }
+        footer { padding: 80px; text-align: center; font-size: 0.9rem; opacity: 0.4; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">NEUROSTACK</div>
-        <div class="nav-links">
-            <a href="#about">VISION</a>
-            <a href="#projects">PROJECTS</a>
-            <a href="#ceo">TEAM</a>
-            <a href="#discord">COMMUNITY</a>
-        </div>
+        <div style="font-weight: bold; color: white;">ENGINEERING TEAM</div>
     </nav>
 
-    <canvas id="main-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
     <section class="hero">
-        <h1 id="hero-title">NEUROSTACK</h1>
-        <p>SMARTLY CREATING A NEW WORLD</p>
+        <h1 id="title">NEUROSTACK</h1>
+        <p>Smartly Creating the Future</p>
     </section>
 
-    <section id="about">
-        <div class="vision-content">
-            <div class="reveal">
-                <h2 style="color:var(--orange); font-size: 3rem;">SMART CREATION</h2>
-                <p>우리는 단순한 코딩을 넘어, 세상을 창조하는 공학적 메커니즘을 설계합니다. 뉴로스택의 기술은 가상과 현실의 경계를 허뭅니다.</p>
-                <ul style="list-style: none; padding: 0; line-height: 2;">
-                    <li>⚡ High-Performance Physics Engines</li>
-                    <li>🧠 Advanced AI Interaction</li>
-                    <li>🌐 Seamless Multi-Platform Integration</li>
-                </ul>
-            </div>
-            <div class="vision-img reveal">
-                <img src="https://picsum.photos/id/180/800/600" alt="Engineering">
+    <section id="ceo">
+        <div class="ceo-container">
+            <div class="ceo-card" id="ceo-trigger">
+                <img src="images/ceo.jpg" alt="정상인 곰돌맨" class="ceo-img">
+                <div>
+                    <h2 style="color: var(--orange); margin: 0; font-size: 2.5rem;">정상인 곰돌맨</h2>
+                    <p style="font-size: 1.2rem; margin: 10px 0;">Founder & Visionary Lead</p>
+                    <p style="max-width: 400px; opacity: 0.7; line-height: 1.6;">"누구보다 똑똑하게, 공학의 힘으로 세상의 한계를 돌파하여 새로운 가상의 우주를 설계합니다."</p>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="projects">
-        <h2 class="reveal" style="font-size: 2.5rem; margin-bottom: 30px;">ACTIVE PROJECTS</h2>
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 0;">PROJECTS</h2>
+        <p style="text-align: center; color: var(--orange); margin-bottom: 50px;">Engineering & Gaming Ecosystem</p>
+        
         <div class="grid">
-            <div class="card reveal-card">
-                <img src="https://picsum.photos/id/96/400/300" alt="p1">
-                <h3>[RP] 한국 소방 시뮬레이터</h3>
-                <p>화재를 진압하라!</p>
-                <a href="https://www.roblox.com" class="card-btn">PLAY NOW</a>
+            <div class="project-card">
+                <img src="images/project1.jpg" alt="p1">
+                <h3>Roblox Physics X</h3>
+                <p>극한의 물리 연산을 구현한 공학 시뮬레이터.</p>
+                <a href="https://www.roblox.com" target="_blank" class="card-btn">JOIN PROJECT →</a>
             </div>
-            <div class="card reveal-card">
-                <img src="https://picsum.photos/id/102/400/300" alt="p2">
-                <h3>뉴로월</h3>
-                <p>뉴로월드에 오신 것을 환영합니다!</p>
-                <a href="https://www.roblox.com" class="card-btn">PLAY NOW</a>
+            <div class="project-card">
+                <img src="images/project2.jpg" alt="p2">
+                <h3>Neuro City</h3>
+                <p>로블록스 최초의 스마트 로직 시티 플랫폼.</p>
+                <a href="https://www.roblox.com" target="_blank" class="card-btn">JOIN PROJECT →</a>
             </div>
-            <div class="card reveal-card">
-                <img src="https://picsum.photos/id/201/400/300" alt="p3">
-                <h3>부산 북구 버스 시뮬레이터</h3>
-                <p>부산 버스 운전하기</p>
-                <a href="https://www.roblox.com" class="card-btn">PLAY NOW</a>
+            <div class="project-card">
+                <img src="images/project3.jpg" alt="p3">
+                <h3>Logic Master</h3>
+                <p>공학적 사고를 극대화하는 브레인 퍼즐 게임.</p>
+                <a href="https://www.roblox.com" target="_blank" class="card-btn">JOIN PROJECT →</a>
             </div>
         </div>
     </section>
 
-    <section id="ceo" class="ceo-section">
-        <div class="ceo-circle reveal">
-            <img src="https://picsum.photos/id/237/400/400" alt="CEO"> </div>
-        <div class="reveal">
-            <h2 style="color: var(--orange);">정상인 곰돌맨</h2>
-            <p>Founder & Lead Engineer</p>
-            <p style="max-width: 600px; margin: 0 auto; opacity: 0.7;">"공학은 예술입니다. 우리는 가장 논리적인 방법으로 유저들에게 가장 비논리적인 즐거움을 선사합니다."</p>
-        </div>
-    </section>
-
-    <section id="discord" class="discord-section">
-        <h2 class="reveal" style="margin-bottom: 40px;">COMMUNITY INSIGHT</h2>
-        <div class="discord-widget reveal">
-            <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" width="100%" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    <section id="community">
+        <h2 style="text-align: center; margin-bottom: 40px;">SERVER INSIGHT</h2>
+        <div class="discord-box">
+            <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" width="100%" height="500" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </div>
     </section>
 
     <footer>
-        &copy; 2024 NEUROSTACK ENGINEERING TEAM. ALL RIGHTS RESERVED.
+        &copy; 2026 NEUROSTACK ENGINEERING TEAM | ALL RIGHTS RESERVED.
     </footer>
 
     <script type="importmap">
@@ -142,27 +122,41 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- Three.js 마우스 인터랙티브 배경 ---
+        // 1. Scene & Camera
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('main-canvas'), antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
 
-        const particlesGeometry = new THREE.BufferGeometry();
-        const count = 1500;
-        const posArray = new Float32Array(count * 3);
+        // 2. Geometry (마우스 반응형 파티클)
+        const geometry = new THREE.BufferGeometry();
+        const count = 3000;
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
 
-        for(let i=0; i<count*3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 15;
+        for(let i=0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 15;
+            colors[i] = i % 3 === 0 ? 1 : 0.5; // 오렌지 빛깔 조절용
         }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.005, color: 0xFF8C00, transparent: true, opacity: 0.5 });
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0xFF8C00,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
 
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
         camera.position.z = 5;
 
+        // 마우스 상호작용 로직 (강화)
         let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX - window.innerWidth / 2) / 100;
             mouseY = (e.clientY - window.innerHeight / 2) / 100;
@@ -170,41 +164,43 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            particlesMesh.rotation.y += 0.001;
-            // 마우스 따라 움직이는 효과
-            particlesMesh.rotation.x += (mouseY * 0.05);
-            particlesMesh.rotation.y += (mouseX * 0.05);
+            
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            points.rotation.y += 0.001;
+            points.rotation.x += targetY * 0.02;
+            points.rotation.y += targetX * 0.02;
+
             renderer.render(scene, camera);
         }
         animate();
 
-        // --- GSAP 애니메이션 (귀깔나는 효과) ---
+        // 3. GSAP 애니메이션 (공학적 감성 팍팍)
         gsap.registerPlugin(ScrollTrigger);
 
-        // 타이틀 애니메이션
-        gsap.from("#hero-title", { duration: 2, y: 100, opacity: 0, ease: "expo.out" });
+        // 히어로 타이틀 웅장하게 등장
+        gsap.from("#title", { duration: 2, y: 100, opacity: 0, ease: "expo.out" });
 
-        // 섹션 텍스트들 순차적 등장
-        gsap.utils.toArray(".reveal").forEach(el => {
-            gsap.to(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                opacity: 1, y: 0, duration: 1.5, ease: "power4.out"
-            });
+        // CEO 카드 3D 회전하며 등장
+        gsap.to(".ceo-card", {
+            scrollTrigger: { trigger: "#ceo", start: "top 70%" },
+            opacity: 1, rotationY: 0, z: 0, duration: 1.5, ease: "power4.out"
         });
 
-        // 프로젝트 카드 날라오기 (Fly-in)
-        gsap.to(".reveal-card", {
+        // 프로젝트 카드들이 슝슝 날아와서 꽂히는 효과
+        gsap.to(".project-card", {
             scrollTrigger: { trigger: ".grid", start: "top 80%" },
-            opacity: 1,
-            x: 0,
-            y: 0,
-            scale: 1,
-            duration: 1,
-            stagger: 0.2,
-            ease: "back.out(1.7)"
+            opacity: 1, scale: 1, y: 0, duration: 1, stagger: 0.2, ease: "back.out(1.7)"
         });
 
-        // 리사이즈
+        // 디스코드 박스 등장
+        gsap.to(".discord-box", {
+            scrollTrigger: { trigger: "#community", start: "top 80%" },
+            opacity: 1, y: 0, duration: 1
+        });
+
+        // 리사이즈 대응
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
