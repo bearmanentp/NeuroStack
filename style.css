@@ -1,155 +1,72 @@
-/* 1. 기본 배경 및 폰트 설정 */
-:root { 
-    --o: #FF8C00; 
-    --dark: #000; 
-}
+:root { --o: #FF8C00; --dark: #000; }
+html, body { margin: 0; padding: 0; background: var(--dark); color: #fff; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
 
-html, body { 
-    margin: 0; 
-    padding: 0; 
-    background: var(--dark); 
-    color: #fff; 
-    font-family: 'Pretendard', sans-serif; 
-    overflow-x: hidden; 
-}
+/* 1. 배경 캔버스 */
+#bg-canvas { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; z-index: -1; pointer-events: none; }
 
-/* 2. 배경 캔버스 고정 */
-#bg-canvas { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100vw !important; 
-    height: 100vh !important; 
-    z-index: -1; 
-    pointer-events: none; 
-}
+/* 2. 네비게이션 */
+nav { display: flex; justify-content: space-between; padding: 25px 50px; position: fixed; width: 100%; box-sizing: border-box; z-index: 100; top: 0; }
+.logo { font: 900 1.6rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 4px; }
+.nav-links a { color: #fff; text-decoration: none; margin-left: 25px; font-weight: 700; transition: 0.3s; }
+.nav-links a:hover { color: var(--o); }
 
-/* 3. 네비게이션 바 */
-nav { 
-    display: flex; 
-    justify-content: space-between; 
-    padding: 25px 50px; 
-    position: fixed; 
-    width: 100%; 
-    box-sizing: border-box; 
-    z-index: 100; 
-}
-
-.logo { 
-    font: 900 1.6rem sans-serif; 
-    color: var(--o); 
-    text-decoration: none; 
-    letter-spacing: 4px; 
-}
-
-.nav-links a { 
-    color: #fff; 
-    text-decoration: none; 
-    margin-left: 25px; 
-    font-weight: 700; 
-}
-
-/* 4. 메인 섹션 및 카드 레이아웃 */
+/* 3. 섹션 공통 (중앙 정렬만 담당) */
 section { 
     min-height: 100vh; 
     display: flex; 
-    align-items: center; /* 수직 중앙 */
-    justify-content: center; /* 수평 중앙 */
-    padding: 120px 20px; 
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center; 
+    justify-content: center; 
+    padding: 100px 20px; 
     box-sizing: border-box; 
+    position: relative;
+    z-index: 10;
 }
 
+/* 4. 메인 화면용 텍스트 (index.html) */
+section h1 { margin: 0; line-height: 1; }
+section p { margin: 10px 0; }
+
+/* 5. 지원 페이지 카드 (apply.html 전용) */
 .card { 
     background: rgba(15, 15, 15, 0.95); 
     border: 1px solid var(--o); 
     padding: 40px; 
     border-radius: 20px; 
     width: 100%; 
-    max-width: 600px; /* 폼이 너무 벌어지지 않게 너비 제한 */
+    max-width: 600px; /* 폼이 너무 퍼지지 않게 */
     backdrop-filter: blur(20px); 
-    position: relative; 
-    z-index: 10; 
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    margin: 20px auto;
 }
 
-/* 5. 폼 내부 요소 세로 정렬 핵심 */
-#applyForm {
-    display: flex;
-    flex-direction: column; /* 모든 요소를 위에서 아래로 쌓음 */
-    text-align: left;
-}
-
-label { 
-    color: var(--o); 
-    font-size: 0.8rem; 
-    margin-bottom: 8px; 
-    margin-top: 10px;
-    font-weight: bold; 
-    text-transform: uppercase;
-}
-
-input, textarea { 
-    width: 100%; /* 너비를 꽉 채움 */
-    display: block; /* 인라인 성질 제거하고 한 줄 독점 */
+/* 6. 폼 내부 요소 (무조건 한 줄씩 차지) */
+#applyForm { width: 100%; display: flex; flex-direction: column; }
+#applyForm label { color: var(--o); font-size: 0.8rem; margin: 15px 0 5px; font-weight: bold; text-align: left; }
+#applyForm input, #applyForm textarea { 
+    width: 100%; 
+    display: block; 
     padding: 14px; 
     background: #111; 
     border: 1px solid #333; 
     color: #fff; 
     border-radius: 8px; 
-    margin-bottom: 15px; 
+    margin-bottom: 5px; 
     box-sizing: border-box; 
     font-family: inherit; 
-    font-size: 1rem;
-    outline: none;
-    transition: 0.3s;
 }
+#applyForm textarea { height: 100px; resize: none; }
 
-input:focus, textarea:focus { 
-    border-color: var(--o); 
-    box-shadow: 0 0 10px rgba(255, 140, 0, 0.2);
+/* 7. 버튼 (메인/지원 공통) */
+.btn, button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 100%; max-width: 280px; height: 65px; background: transparent; border: 2px solid var(--o);
+    color: var(--o); font-size: 1.1rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 3px; cursor: pointer; position: relative; overflow: hidden;
+    transition: 0.4s; font-family: inherit; margin: 20px 0; outline: none; text-decoration: none;
 }
+button { max-width: none; } /* 지원창 버튼은 카드에 꽉 차게 */
 
-textarea { 
-    height: 120px; 
-    resize: none; /* 사용자 임의 크기 조절 금지 */
-}
-
-/* 6. 제출 버튼 */
-button {
-    width: 100%; 
-    height: 65px; 
-    background: transparent; 
-    border: 2px solid var(--o);
-    color: var(--o); 
-    font-size: 1.1rem; 
-    font-weight: 900; 
-    text-transform: uppercase;
-    letter-spacing: 3px; 
-    cursor: pointer; 
-    position: relative; 
-    overflow: hidden; 
-    transition: 0.4s; 
-    margin-top: 20px;
-    z-index: 1;
-}
-
-button::before { 
-    content: ''; 
-    position: absolute; 
-    top: 0; 
-    left: -100%; 
-    width: 100%; 
-    height: 100%; 
-    background: var(--o); 
-    transition: 0.4s; 
-    z-index: -1; 
-}
-
-button:hover { 
-    color: #000 !important; 
-    box-shadow: 0 0 30px var(--o); 
-}
-
-button:hover::before { 
-    left: 0; 
-}
+.btn::before, button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--o); transition: 0.4s; z-index: -1; }
+.btn:hover, button:hover { color: #000 !important; box-shadow: 0 0 30px var(--o); }
+.btn:hover::before, button:hover::before { left: 0; }
