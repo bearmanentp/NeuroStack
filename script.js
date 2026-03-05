@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
-// 1. 설정 및 변수
-const URL = 'https://script.google.com/macros/s/AKfycbx5Z8E18sLXW2lue_UaiPgI0QfPiODE7AhF_LHUSpRa8hXHbehOb78QZkjk0WqheYLSyQ/exec'; // 여기에 구글 웹앱 URL 반드시 넣으세요!
+// 1. 설정 (URL 필수 수정)
+const URL = 'https://script.google.com/macros/s/AKfycbx5Z8E18sLXW2lue_UaiPgI0QfPiODE7AhF_LHUSpRa8hXHbehOb78QZkjk0WqheYLSyQ/exec'; 
 let rx = 0, ry = 0;
 
 // ==========================================
-// 2. Three.js 배경 (모바일 반응형 & 터치)
+// 2. Three.js (모바일 터치 & 반응형)
 // ==========================================
 const initThree = () => {
     const canvas = document.getElementById('bg-canvas');
@@ -48,10 +48,10 @@ const initThree = () => {
 };
 
 // ==========================================
-// 3. 지원서 제출 및 전화번호 하이픈
+// 3. 폼 로직 (전화번호 하이픈 & 제출)
 // ==========================================
-const initFormLogic = () => {
-    // 전화번호 자동 하이픈 (010-0000-0000)
+const initForm = () => {
+    // 자동 하이픈
     document.addEventListener('input', (e) => {
         if (e.target.name === 'phone') {
             let v = e.target.value.replace(/\D/g, '');
@@ -62,93 +62,61 @@ const initFormLogic = () => {
         }
     });
 
-    // 지원 제출 (apply.html)
+    // 지원서 제출
     const applyForm = document.getElementById('applyForm');
     if (applyForm) {
         applyForm.onsubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
-            btn.innerText = "제출 중...";
-            btn.disabled = true;
+            btn.innerText = "SENDING..."; btn.disabled = true;
             
-            const data = { ...Object.fromEntries(new FormData(e.target)), action: 'submit' };
             try {
-                await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
-                alert("제출 완료! 3월 10일에 연락드립니다.");
+                await fetch(URL, { method: 'POST', body: JSON.stringify({ ...Object.fromEntries(new FormData(e.target)), action: 'submit' }) });
+                alert("제출 성공! 3월 10일에 결과가 나옵니다.");
                 location.href = 'index.html';
             } catch (err) {
-                alert("제출 실패. 다시 시도해주세요.");
-                btn.innerText = "SUBMIT";
-                btn.disabled = false;
+                alert("제출 실패. 권한 설정을 확인하세요.");
+                btn.innerText = "SUBMIT"; btn.disabled = false;
             }
         };
     }
 };
 
 // ==========================================
-// 4. 조회 및 관리자 기능 (조회 후 수정 로직 포함)
+// 4. 결과 조회 및 관리자 기능
 // ==========================================
-
-// 지원자 결과 조회 (check.html)
 window.checkStatus = async () => {
-    const id = document.getElementById('cId').value;
-    const name = document.getElementById('cName').value;
+    const id = document.getElementById('cId').value, name = document.getElementById('cName').value;
     const div = document.getElementById('statusRes');
-    if (!id || !name) return alert("정보를 모두 입력하세요.");
+    if (!id || !name) return alert("학번과 이름을 입력하세요.");
     
     div.style.display = 'block'; div.innerText = "조회 중...";
-    try {
-        const res = await fetch(`${URL}?action=check&id=${id}&name=${name}`).then(r => r.json());
-        div.innerHTML = res.found ? `<h3>${name}님 결과: ${res.status}</h3><p>면접 상태: ${res.interview}</p>` : "정보를 찾을 수 없습니다.";
-    } catch(e) { div.innerText = "에러 발생"; }
+    const res = await fetch(`${URL}?action=check&id=${id}&name=${name}`).then(r => r.json());
+    div.innerHTML = res.found ? `<h3>${name}님 결과: ${res.status}</h3><p>면접: ${res.interview}</p>` : "정보 없음";
 };
 
-// [ADMIN] 현재 상태 불러오기 (admin.html)
 window.fetchCurrentStatus = async () => {
     const id = document.getElementById('tId').value;
-    if(!id) return alert("학번을 입력하세요.");
-
-    const res = await fetch(`${URL}?action=adminFetch&id=${id}`);
-    const data = await res.json();
-
-    if(data.found) {
+    const res = await fetch(`${URL}?action=adminFetch&id=${id}`).then(r => r.json());
+    if(res.found) {
         document.getElementById('edit-area').style.display = 'block';
-        document.getElementById('targetName').innerText = `대상자: ${data.name} (현재: ${data.interview} / ${data.status})`;
-        document.getElementById('sInterview').value = data.interview;
-        document.getElementById('sFinal').value = data.status;
-    } else {
-        alert("해당 학번의 지원자를 찾을 수 없습니다.");
-        document.getElementById('edit-area').style.display = 'none';
-    }
+        document.getElementById('targetName').innerText = `대상자: ${res.name}`;
+        document.getElementById('sInterview').value = res.interview;
+        document.getElementById('sFinal').value = res.status;
+    } else alert("조회 실패");
 };
 
-// [ADMIN] 상태 업데이트 (admin.html)
 window.updateStatus = async () => {
-    const targetId = document.getElementById('tId').value;
-    const data = {
-        action: 'adminUpdate',
-        targetId: targetId,
-        interviewStatus: document.getElementById('sInterview').value,
-        finalStatus: document.getElementById('sFinal').value
-    };
-
-    if(!confirm("수정하시겠습니까?")) return;
-
-    try {
-        await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
-        alert("업데이트 완료!");
-        location.reload();
-    } catch (e) { alert("업데이트 실패"); }
+    const data = { action: 'adminUpdate', targetId: document.getElementById('tId').value, 
+                   interviewStatus: document.getElementById('sInterview').value, finalStatus: document.getElementById('sFinal').value };
+    await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
+    alert("수정 완료!"); location.reload();
 };
 
 // ==========================================
-// 5. 공통 초기화 및 단축키
+// 5. 초기화 및 단축키
 // ==========================================
-window.addEventListener('DOMContentLoaded', () => {
-    initThree();
-    initFormLogic();
-});
-
+window.addEventListener('DOMContentLoaded', () => { initThree(); initForm(); });
 window.addEventListener('keydown', (e) => {
     if(e.ctrlKey && e.altKey && e.key.toLowerCase() === 'l') location.href = 'admin.html';
 });
