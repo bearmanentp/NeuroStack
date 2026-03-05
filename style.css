@@ -1,204 +1,48 @@
-/* --- 1. 기본 테마 설정 --- */
 :root {
-    --o: #FF8C00;        /* 메인 오렌지 */
+    --o: #FF8C00;
     --o-glow: rgba(255, 140, 0, 0.5);
-    --dark: #000000;     /* 배경 블랙 */
-    --card-bg: rgba(15, 15, 15, 0.85);
+    --dark: #000000;
 }
 
-/* --- 2. 전체 레이아웃 --- */
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--dark);
-    color: #fff;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    overflow-x: hidden;
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: var(--dark); color: #fff;
+    font-family: 'Pretendard', sans-serif; overflow-x: hidden;
 }
 
-/* 3D 배경 캔버스 고정 */
+/* 3D 배경 고정 */
 #bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: -1;
-    pointer-events: none;
-    display: block;
+    position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important;
+    z-index: -1; pointer-events: none;
 }
 
-/* --- 3. 네비게이션 스타일 --- */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px 50px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 100;
-}
+nav { display: flex; justify-content: space-between; padding: 25px 50px; position: fixed; width: 100%; box-sizing: border-box; z-index: 100; }
+.logo { font: 900 1.6rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 4px; }
+.nav-links a { color: #fff; text-decoration: none; margin-left: 25px; font-weight: 700; }
 
-.logo {
-    font: 900 1.6rem sans-serif;
-    color: var(--o);
-    text-decoration: none;
-    letter-spacing: 4px;
-    text-shadow: 0 0 15px var(--o-glow);
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 25px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--o);
-    text-shadow: 0 0 10px var(--o-glow);
-}
-
-/* --- 4. 섹션 및 카드 구조 --- */
-section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 20px;
-    box-sizing: border-box;
-}
+section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 20px; box-sizing: border-box; }
 
 .card {
-    background: var(--card-bg);
-    border: 1px solid var(--o);
-    padding: 40px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 650px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-    position: relative;
-    z-index: 10;
+    background: rgba(15, 15, 15, 0.9); border: 1px solid var(--o); padding: 40px; border-radius: 20px;
+    width: 100%; max-width: 650px; backdrop-filter: blur(15px); position: relative; z-index: 10;
 }
 
-/* --- 5. 버튼 마스터 스타일 (전체 통합) --- */
-/* 링크(a), 제출(submit), 일반버튼(button) 모두 동일하게 적용 */
-.btn, .btn-join, button[type="submit"], button[type="button"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 260px;
-    height: 62px;
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid var(--o);
-    color: var(--o);
-    font-size: 1.1rem;
-    font-weight: 900;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    margin: 15px 0;
-    font-family: inherit;
-    outline: none;
+/* 버튼 하이엔드 레이저 스타일 */
+.btn, .btn-join, button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 280px; height: 65px; background: transparent; border: 2px solid var(--o);
+    color: var(--o); font-size: 1.1rem; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 3px; cursor: pointer; position: relative; overflow: hidden;
+    transition: 0.4s; font-family: inherit; margin: 10px 0; outline: none;
 }
 
-.btn:hover, .btn-join:hover, button:hover {
-    background: var(--o);
-    color: #000;
-    box-shadow: 0 0 35px var(--o);
-    transform: translateY(-3px) scale(1.02);
+.btn::before, button::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: var(--o); transition: 0.4s; z-index: -1;
 }
 
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    border-color: #555;
-    color: #555;
-}
+.btn:hover, button:hover { color: #000 !important; box-shadow: 0 0 30px var(--o); transform: translateY(-3px); }
+.btn:hover::before, button:hover::before { left: 0; }
 
-/* --- 6. 폼 입력창 스타일 --- */
-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-label {
-    color: var(--o);
-    display: block;
-    text-align: left;
-    font-size: 0.85rem;
-    margin: 15px 0 8px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid #333;
-    color: #fff;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: 0.3s;
-}
-
-input:focus, textarea:focus {
-    border-color: var(--o);
-    background: rgba(255, 140, 0, 0.05);
-    outline: none;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* --- 7. 메인 페이지 전용 & 공지사항 --- */
-.hero-p {
-    letter-spacing: 8px;
-    opacity: 0.7;
-    margin: 15px 0;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-}
-
-.notice-box {
-    margin: 25px 0;
-    padding: 15px 25px;
-    border: 1px dashed var(--o);
-    background: rgba(255, 140, 0, 0.1);
-    color: #fff;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    display: inline-block;
-    border-radius: 4px;
-}
-
-.notice-box strong {
-    color: var(--o);
-}
-
-/* --- 8. 반응형 처리 --- */
-@media (max-width: 768px) {
-    nav { padding: 20px; }
-    .logo { font-size: 1.3rem; }
-    .card { padding: 25px; }
-    .btn, .btn-join, button { width: 100%; }
-}
+input, textarea { width: 100%; padding: 14px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+.notice-box { margin: 25px 0; padding: 15px; border: 1px dashed var(--o); background: rgba(255, 140, 0, 0.1); }
