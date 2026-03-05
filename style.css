@@ -1,46 +1,155 @@
-:root { --o: #FF8C00; --dark: #000; }
-html, body { margin: 0; padding: 0; background: var(--dark); color: #fff; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+/* 1. 기본 배경 및 폰트 설정 */
+:root { 
+    --o: #FF8C00; 
+    --dark: #000; 
+}
 
-/* 배경 캔버스 */
-#bg-canvas { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; z-index: -1; pointer-events: none; }
+html, body { 
+    margin: 0; 
+    padding: 0; 
+    background: var(--dark); 
+    color: #fff; 
+    font-family: 'Pretendard', sans-serif; 
+    overflow-x: hidden; 
+}
 
-nav { display: flex; justify-content: space-between; padding: 25px 50px; position: fixed; width: 100%; box-sizing: border-box; z-index: 100; }
-.logo { font: 900 1.6rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 4px; }
-.nav-links a { color: #fff; text-decoration: none; margin-left: 25px; font-weight: 700; }
+/* 2. 배경 캔버스 고정 */
+#bg-canvas { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw !important; 
+    height: 100vh !important; 
+    z-index: -1; 
+    pointer-events: none; 
+}
 
-section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 20px; box-sizing: border-box; }
+/* 3. 네비게이션 바 */
+nav { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 25px 50px; 
+    position: fixed; 
+    width: 100%; 
+    box-sizing: border-box; 
+    z-index: 100; 
+}
 
-/* 카드 박스: 내용이 많으므로 padding 조절 */
+.logo { 
+    font: 900 1.6rem sans-serif; 
+    color: var(--o); 
+    text-decoration: none; 
+    letter-spacing: 4px; 
+}
+
+.nav-links a { 
+    color: #fff; 
+    text-decoration: none; 
+    margin-left: 25px; 
+    font-weight: 700; 
+}
+
+/* 4. 메인 섹션 및 카드 레이아웃 */
+section { 
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; /* 수직 중앙 */
+    justify-content: center; /* 수평 중앙 */
+    padding: 120px 20px; 
+    box-sizing: border-box; 
+}
+
 .card { 
     background: rgba(15, 15, 15, 0.95); 
     border: 1px solid var(--o); 
     padding: 40px; 
     border-radius: 20px; 
     width: 100%; 
-    max-width: 650px; 
+    max-width: 600px; /* 폼이 너무 벌어지지 않게 너비 제한 */
     backdrop-filter: blur(20px); 
     position: relative; 
     z-index: 10; 
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
 }
 
-/* 입력창 및 텍스트에어리어 */
+/* 5. 폼 내부 요소 세로 정렬 핵심 */
+#applyForm {
+    display: flex;
+    flex-direction: column; /* 모든 요소를 위에서 아래로 쌓음 */
+    text-align: left;
+}
+
+label { 
+    color: var(--o); 
+    font-size: 0.8rem; 
+    margin-bottom: 8px; 
+    margin-top: 10px;
+    font-weight: bold; 
+    text-transform: uppercase;
+}
+
 input, textarea { 
-    width: 100%; padding: 14px; background: #111; border: 1px solid #333; 
-    color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; 
-    font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.3s;
+    width: 100%; /* 너비를 꽉 채움 */
+    display: block; /* 인라인 성질 제거하고 한 줄 독점 */
+    padding: 14px; 
+    background: #111; 
+    border: 1px solid #333; 
+    color: #fff; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+    box-sizing: border-box; 
+    font-family: inherit; 
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
 }
-input:focus, textarea:focus { border-color: var(--o); box-shadow: 0 0 10px rgba(255, 140, 0, 0.2); }
 
-textarea { height: 100px; resize: none; } /* 높이 고정 및 크기조절 금지 */
+input:focus, textarea:focus { 
+    border-color: var(--o); 
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.2);
+}
 
-label { color: var(--o); display: block; text-align: left; font-size: 0.75rem; margin: 5px 0 5px 2px; font-weight: bold; text-transform: uppercase; }
+textarea { 
+    height: 120px; 
+    resize: none; /* 사용자 임의 크기 조절 금지 */
+}
 
-/* 버튼 */
+/* 6. 제출 버튼 */
 button {
-    width: 100%; height: 60px; background: transparent; border: 2px solid var(--o);
-    color: var(--o); font-size: 1.1rem; font-weight: 900; letter-spacing: 2px;
-    cursor: pointer; position: relative; overflow: hidden; transition: 0.4s; margin-top: 20px;
+    width: 100%; 
+    height: 65px; 
+    background: transparent; 
+    border: 2px solid var(--o);
+    color: var(--o); 
+    font-size: 1.1rem; 
+    font-weight: 900; 
+    text-transform: uppercase;
+    letter-spacing: 3px; 
+    cursor: pointer; 
+    position: relative; 
+    overflow: hidden; 
+    transition: 0.4s; 
+    margin-top: 20px;
+    z-index: 1;
 }
-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--o); transition: 0.4s; z-index: -1; }
-button:hover { color: #000; box-shadow: 0 0 25px var(--o); }
-button:hover::before { left: 0; }
+
+button::before { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: -100%; 
+    width: 100%; 
+    height: 100%; 
+    background: var(--o); 
+    transition: 0.4s; 
+    z-index: -1; 
+}
+
+button:hover { 
+    color: #000 !important; 
+    box-shadow: 0 0 30px var(--o); 
+}
+
+button:hover::before { 
+    left: 0; 
+}
