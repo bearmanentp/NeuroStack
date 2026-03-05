@@ -2,22 +2,22 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>NEUROSTACK | Check</title>
+    <title>Status | NEUROSTACK</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav><a href="index.html" class="logo">NEUROSTACK</a></nav>
     <canvas id="bg-canvas"></canvas>
-
     <section>
         <div class="card" style="text-align: center;">
-            <h2 style="margin-bottom: 30px;">STATUS CHECK</h2>
+            <h2>STATUS CHECK</h2>
             <input type="text" id="cId" placeholder="학번">
             <input type="text" id="cName" placeholder="이름">
-            <button onclick="checkStatus()" class="btn-legend">조회하기</button>
-            <div id="statusRes" style="margin-top: 30px; display: none; padding: 20px; border: 1px dashed var(--orange);"></div>
+            <button onclick="checkStatus()" class="btn-legend" style="width:100%;">CHECK NOW</button>
+            <div id="statusRes" style="margin-top:30px; display:none; padding:20px; border:1px dashed var(--orange);"></div>
         </div>
     </section>
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
