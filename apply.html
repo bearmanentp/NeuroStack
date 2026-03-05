@@ -1,30 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8"><title>APPLY | NEUROSTACK</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APPLY | NEUROSTACK</title>
     <link rel="stylesheet" href="style.css">
-    <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
+    <script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <nav><a href="index.html" class="logo">NEUROSTACK</a><div class="nav-links"><a href="apply.html">SUPPORT</a><a href="check.html">STATUS</a></div></nav>
+
+    <nav>
+        <a href="index.html" class="logo">NEUROSTACK</a>
+        <div class="nav-links">
+            <a href="apply.html">SUPPORT</a>
+            <a href="check.html">STATUS</a>
+        </div>
+    </nav>
+
     <section>
         <div class="card">
-            <h2 style="color: var(--o);">APPLICATION</h2>
+            <h2 style="color: var(--o); margin-bottom: 20px;">APPLICATION</h2>
             <form id="applyForm">
                 <input type="text" name="studentId" placeholder="학번" required>
                 <input type="text" name="name" placeholder="이름" required>
                 <input type="tel" name="phone" placeholder="전화번호" required>
-                <label>게임 개발 경험</label><textarea name="gameExp"></textarea>
-                <label>자기소개</label><textarea name="intro" required></textarea>
-                <label>자격증</label><input type="text" name="license">
-                <label>가입 사유</label><textarea name="reason" required></textarea>
-                <label>동아리에서 하고 싶은 것</label><textarea name="wishList" required></textarea>
-                <label>AI 활용 계획</label><textarea name="aiPlan" required></textarea>
+                
+                <label>게임 개발 경험</label>
+                <textarea name="gameExp" placeholder="경험이 없다면 '없음' 기재"></textarea>
+                
+                <label>자기소개</label>
+                <textarea name="intro" required placeholder="본인을 자유롭게 표현해주세요"></textarea>
+                
+                <label>보유 자격증</label>
+                <input type="text" name="license" placeholder="없을 시 비워두세요">
+                
+                <label>동아리 가입 사유</label>
+                <textarea name="reason" required></textarea>
+                
+                <label>동아리에서 하고 싶은 것</label>
+                <textarea name="wishList" required></textarea>
+                
+                <label>AI 활용 계획 (LLM 등)</label>
+                <textarea name="aiPlan" required></textarea>
+                
                 <button type="submit">SUBMIT APPLICATION</button>
             </form>
         </div>
     </section>
+
     <script type="module" src="script.js"></script>
 </body>
 </html>
