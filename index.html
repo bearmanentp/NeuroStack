@@ -18,27 +18,29 @@
     <canvas id="bg-canvas"></canvas>
 
     <section>
-        <h1 style="font-size: 6vw; color: var(--orange);">NEUROSTACK VISION</h1>
-        <div style="margin-top: 30px;">
-            <a href="apply.html" class="btn-legend">JOIN THE TEAM</a>
+        <h1 style="font-size: 8vw; color: var(--orange); margin:0;">NEUROSTACK</h1>
+        <p style="letter-spacing: 10px; opacity:0.7;">ENGINEERING THE FUTURE</p>
+        <div style="margin-top: 50px;">
+            <a href="apply.html" class="btn-legend">GET STARTED</a>
         </div>
     </section>
 
     <section id="image-section">
-        <div id="a2-poster" style="width: auto; height: 80vh; aspect-ratio: 1/1.414; border: 2px solid var(--orange); opacity: 0;">
+        <div id="a2-poster" style="width: auto; height: 80vh; aspect-ratio: 1/1.414; border: 2px solid var(--orange); opacity: 0; transform: translateY(50px);">
             <img src="poster.jpg" alt="A2 Poster" style="width:100%; height:100%; object-fit:cover;">
         </div>
     </section>
 
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
     <script type="module" src="script.js"></script>
     <script>
-        // 메인 전용 스크롤 애니메이션
-        setTimeout(() => {
+        window.addEventListener('load', () => {
+            gsap.registerPlugin(ScrollTrigger);
             gsap.to("#a2-poster", {
                 scrollTrigger: { trigger: "#image-section", start: "top 70%" },
-                opacity: 1, y: -50, duration: 1.5
+                opacity: 1, y: 0, duration: 1.5
             });
-        }, 500);
+        });
     </script>
 </body>
 </html>
