@@ -2,30 +2,29 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>NEUROSTACK | Apply</title>
+    <title>Apply | NEUROSTACK</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav><a href="index.html" class="logo">NEUROSTACK</a></nav>
     <canvas id="bg-canvas"></canvas>
-
     <section>
         <div class="card">
-            <h2 style="color: var(--orange);">APPLICATION</h2>
+            <h2>APPLICATION</h2>
             <form id="applyForm">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <input type="text" name="studentId" placeholder="학번" required>
                     <input type="text" name="name" placeholder="이름" required>
                 </div>
                 <input type="tel" name="phone" placeholder="전화번호" required>
-                <label>게임 개발 경험</label><textarea name="experience"></textarea>
-                <label>자기소개 / 가입사유</label><textarea name="intro" required></textarea>
-                <label>AI 활용 계획</label><textarea name="aiUse" required></textarea>
-                <p style="font-size: 0.8rem; opacity: 0.6; text-align: center;">3월 10일 전까지 연락 후 대면 면접 진행 예정</p>
-                <button type="submit" class="btn-legend" style="width: 100%;">제출하기</button>
+                <label>게임 개발 경험</label><textarea name="experience" style="height:100px;"></textarea>
+                <label>자기소개 및 가입사유</label><textarea name="intro" style="height:100px;" required></textarea>
+                <label>AI 활용 계획</label><textarea name="aiUse" style="height:100px;" required></textarea>
+                <button type="submit" class="btn-legend" style="width: 100%;">SUBMIT APPLICATION</button>
             </form>
         </div>
     </section>
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
