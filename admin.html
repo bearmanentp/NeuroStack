@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ADMIN | NEUROSTACK</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
+</head>
+<body>
+    <nav><a href="index.html" class="logo">NEUROSTACK ADMIN</a></nav>
+    <canvas id="bg-canvas"></canvas>
+
+    <section>
+        <div class="card" style="border-color: red;">
+            <h2 style="color: red; margin-bottom: 30px;">DATABASE CONTROL</h2>
+            
+            <label>관리 대상 학번 입력</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="tId" placeholder="예: 20261234" style="margin:0;">
+                <button class="btn" style="border-color: #fff; color: #fff; padding: 0 20px;" onclick="fetchCurrentStatus()">불러오기</button>
+            </div>
+
+            <div id="edit-area" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; display: none;">
+                <p id="targetName" style="font-weight: bold; color: var(--o); margin-bottom: 20px;"></p>
+                
+                <label>대면 면접 여부 설정</label>
+                <select id="sInterview">
+                    <option value="서류 검토 중">서류 검토 중</option>
+                    <option value="대상자 (일정 안내 완료)">면접 대상자</option>
+                    <option value="면접 완료">면접 완료</option>
+                    <option value="해당 없음">해당 없음</option>
+                </select>
+
+                <label>최종 합격 여부 설정</label>
+                <select id="sFinal">
+                    <option value="심사 중">심사 중</option>
+                    <option value="최종 합격">최종 합격 (PASS)</option>
+                    <option value="불합격">불합격 (FAIL)</option>
+                </select>
+
+                <button class="btn" style="width: 100%; background: red; color: white; border: none; margin-top: 20px;" onclick="updateStatus()">DB 업데이트 실행</button>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
