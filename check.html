@@ -1,43 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECK STATUS | NEUROSTACK</title>
-    
+    <meta charset="UTF-8"><title>STATUS | NEUROSTACK</title>
     <link rel="stylesheet" href="style.css">
-    
-    <script type="importmap">
-    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-    </script>
+    <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-
-    <nav>
-        <a href="index.html" class="logo">NEUROSTACK</a>
-        <div class="nav-links">
-            <a href="apply.html">SUPPORT</a>
-            <a href="check.html">STATUS</a>
-        </div>
-    </nav>
-
+    <nav><a href="index.html" class="logo">NEUROSTACK</a><div class="nav-links"><a href="apply.html">SUPPORT</a><a href="check.html">STATUS</a></div></nav>
     <section>
         <div class="card">
-            <h2 style="color: var(--o); margin-bottom: 10px;">STATUS CHECK</h2>
-            <p style="margin-bottom: 30px; opacity: 0.8;">학번을 입력하여 지원 상세 내용과 합격 여부를 확인하세요.</p>
-            
-            <div style="margin-bottom: 20px;">
-                <input type="text" id="cId" placeholder="학번 (예: 20261234)" style="text-align: center;">
-            </div>
-            
-            <button type="button" onclick="checkStatus()" class="btn">CHECK DETAILS</button>
-
-            <div id="statusRes" style="margin-top: 40px; display: none; border-top: 1px solid #333; padding-top: 30px;">
-                </div>
+            <h2 style="color: var(--o);">STATUS CHECK</h2>
+            <input type="text" id="cId" placeholder="학번 입력" style="text-align: center;">
+            <button type="button" onclick="checkStatus()">CHECK DETAILS</button>
+            <div id="statusRes" style="margin-top: 30px; display: none; text-align: left;"></div>
         </div>
     </section>
-
     <script type="module" src="script.js"></script>
 </body>
 </html>
