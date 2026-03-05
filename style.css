@@ -1,68 +1,57 @@
-:root { --orange: #FF8C00; --dark: #000; }
-body { margin: 0; background: var(--dark); color: white; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+:root { --o: #FF8C00; --dark: #000; }
 
-/* Three.js 배경 캔버스 - 모바일/데스크탑 강제 고정 */
-#bg-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100vw !important; height: 100vh !important;
+body { 
+    margin: 0; background: var(--dark); color: #fff; 
+    font-family: 'Pretendard', sans-serif; overflow-x: hidden; 
+}
+
+/* Three.js 배경 캔버스 고정 */
+#bg-canvas { 
+    position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important;
     z-index: -1; pointer-events: none; display: block;
 }
 
 /* 네비게이션 */
-nav { width: 100%; padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
-.logo { font-size: 1.8rem; font-weight: 900; color: var(--orange); letter-spacing: 4px; text-decoration: none; }
-.nav-links { display: flex; gap: 20px; }
-.nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-.nav-links a:hover { color: var(--orange); }
+nav { 
+    display: flex; justify-content: space-between; padding: 25px 50px; 
+    position: fixed; width: 100%; box-sizing: border-box; z-index: 100; 
+}
+.logo { font: 900 1.6rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 4px; }
+.nav-links a { color: #fff; text-decoration: none; margin-left: 25px; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+.nav-links a:hover { color: var(--o); }
 
-/* 섹션 레이아웃 */
-section { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; box-sizing: border-box; }
+/* 섹션 공통 */
+section { 
+    min-height: 100vh; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; text-align: center; padding: 20px; 
+}
 
-/* 카드 스타일 */
+/* 조인어스 버튼 (링크형 버튼) */
+.btn-join {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 240px; height: 60px; background: transparent; border: 2px solid var(--o);
+    color: var(--o); font-size: 1.2rem; font-weight: 900; text-decoration: none;
+    text-transform: uppercase; letter-spacing: 4px; margin-top: 40px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.btn-join:hover { color: #000; background: var(--o); box-shadow: 0 0 40px var(--o); transform: scale(1.05); }
+
+/* 카드 및 폼 스타일 */
 .card { 
-    background: rgba(15, 15, 15, 0.9); border: 1px solid var(--orange); 
-    padding: 40px; border-radius: 20px; width: 100%; max-width: 800px; 
-    backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(255, 140, 0, 0.1);
+    background: rgba(15,15,15,0.9); border: 1px solid var(--o); 
+    padding: 40px; border-radius: 20px; width: 95%; max-width: 700px; 
+    backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(255,140,0,0.1);
 }
-
-/* 버튼 통합 스타일 */
-.btn { 
-    display: inline-block;
-    padding: 15px 45px; 
-    border: 2px solid var(--o); 
-    color: var(--o); 
-    text-decoration: none; 
-    font-weight: 900; 
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    transition: all 0.3s ease; 
-    background: rgba(0, 0, 0, 0.5); 
-    cursor: pointer; 
-    text-transform: uppercase;
-    margin-top: 20px;
-    min-width: 200px;
-    text-align: center;
-}
-
-.btn:hover { 
-    background: var(--o); 
-    color: #000; 
-    box-shadow: 0 0 30px var(--o); 
-    transform: translateY(-3px); /* 살짝 떠오르는 효과 */
-}
-
-/* 히어로 섹션 글자 간격 조정 */
-.hero-p {
-    letter-spacing: 10px; 
-    opacity: 0.6; 
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-
-/* 폼 요소 */
 input, textarea, select { 
     width: 100%; padding: 15px; background: #111; border: 1px solid #333; 
-    color: white; border-radius: 5px; margin-bottom: 15px; box-sizing: border-box; font-size: 1rem;
+    color: #fff; border-radius: 5px; margin-bottom: 15px; box-sizing: border-box; font-size: 1rem;
 }
-input:focus, textarea:focus { border-color: var(--orange); outline: none; }
-label { color: var(--orange); display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem; }
+input:focus { border-color: var(--o); outline: none; }
+label { color: var(--o); display: block; text-align: left; font-size: 0.8rem; margin: 10px 0 5px; font-weight: bold; }
+
+/* A2 포스터 애니메이션용 */
+.a2-poster { 
+    width: auto; height: 80vh; aspect-ratio: 1/1.414; border: 2px solid var(--o); 
+    opacity: 0; transform: translateY(50px); overflow: hidden; 
+}
+.a2-poster img { width: 100%; height: 100%; object-fit: cover; }
