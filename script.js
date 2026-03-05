@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // 1. 설정 (URL 필수 수정)
-const URL = 'https://script.google.com/macros/s/AKfycbx5Z8E18sLXW2lue_UaiPgI0QfPiODE7AhF_LHUSpRa8hXHbehOb78QZkjk0WqheYLSyQ/exec'; 
+const URL = 'https://script.google.com/macros/s/AKfycbxDofOqA81c9gxr0itFIJarHNS8liA2pLIhipAO8JZZjSjrF62L8CZ-uC3Zl45L8cC0Qg/exec'; 
 let rx = 0, ry = 0;
 
 // ==========================================
