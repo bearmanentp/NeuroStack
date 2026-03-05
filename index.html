@@ -2,19 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>NEUROSTACK | Home</title>
+    <title>NEUROSTACK</title>
     <link rel="stylesheet" href="style.css">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-        }
-    }
-    </script>
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
 </head>
 <body>
     <nav>
@@ -24,17 +16,27 @@
             <a href="check.html">STATUS</a>
         </div>
     </nav>
-
     <canvas id="bg-canvas"></canvas>
 
-    <section class="hero">
-        <h1 style="font-size: 8vw; color: var(--orange); margin:0;">NEUROSTACK</h1>
-        <p style="letter-spacing: 10px; opacity:0.7;">ENGINEERING THE FUTURE</p>
-        <div style="margin-top: 50px;">
-            <a href="apply.html" class="btn-legend">GET STARTED</a>
+    <section>
+        <h1 style="font-size: 10vw; margin: 0; color: var(--o);">NEUROSTACK</h1>
+        <p style="letter-spacing: 10px; opacity: 0.6;">ENGINEERING THE FUTURE</p>
+        <a href="apply.html" class="btn" style="margin-top: 50px;">JOIN US</a>
+    </section>
+
+    <section id="poster-sec">
+        <div class="a2-poster" id="a2-poster">
+            <img src="poster.jpg" alt="A2 Vision Poster">
         </div>
     </section>
 
     <script type="module" src="script.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.to("#a2-poster", {
+            scrollTrigger: { trigger: "#poster-sec", start: "top 70%" },
+            opacity: 1, y: 0, duration: 1.5
+        });
+    </script>
 </body>
 </html>
