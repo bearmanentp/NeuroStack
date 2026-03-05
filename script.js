@@ -23,7 +23,7 @@ if (canvas) {
 }
 
 // 2. API 로직
-const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6lfyrYcxbzOo1QYkMrjH94R7k4YlaqhfkDAwntaBTz91RzwkVGJDiHUggNgfNwT7pbA/exec';
 
 // 지원 제출
 const applyForm = document.getElementById('applyForm');
