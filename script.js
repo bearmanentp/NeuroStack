@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // 1. 설정 및 변수
-const URL = 'https://script.google.com/macros/s/AKfycbyJngqjRpf75uqrqpM9YfIGLPL-1JyPeKrl8gPfoklR8rR1uEiCamrlPTon7lijguv3rA/exec'; // 여기에 구글 웹앱 URL 반드시 넣으세요!
+const URL = 'https://script.google.com/macros/s/AKfycbx5Z8E18sLXW2lue_UaiPgI0QfPiODE7AhF_LHUSpRa8hXHbehOb78QZkjk0WqheYLSyQ/exec'; // 여기에 구글 웹앱 URL 반드시 넣으세요!
 let rx = 0, ry = 0;
 
 // ==========================================
