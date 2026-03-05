@@ -173,7 +173,7 @@
         animate();
 
         // --- 기능 로직 핸들러 ---
-        const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6lfyrYcxbzOo1QYkMrjH94R7k4YlaqhfkDAwntaBTz91RzwkVGJDiHUggNgfNwT7pbA/exec';
 
         // 섹션 이동 함수
         window.goTo = (id) => {
@@ -198,7 +198,7 @@
             const data = Object.fromEntries(new FormData(e.target).entries());
             data.action = "submit";
             await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
-            alert("지원이 완료되었습니다. 3월 10일에 뵙겠습니다!");
+            alert("지원이 완료되었습니다. 3월 10일 전에 뵙겠습니다!");
             e.target.reset();
             btn.innerText = "SUBMIT APPLICATION";
         };
