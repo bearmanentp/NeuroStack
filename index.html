@@ -2,229 +2,43 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEUROSTACK | Engineering & Vision</title>
+    <title>NEUROSTACK | Home</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <style>
-        :root { --orange: #FF8C00; --dark: #000; }
-        body { margin: 0; background: var(--dark); color: white; font-family: 'Pretendard', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* Three.js 배경 고정 */
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
-
-        /* 네비게이션 */
-        nav { position: fixed; top: 0; width: 100%; padding: 25px 50px; display: flex; justify-content: space-between; z-index: 1000; box-sizing: border-box; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--orange); letter-spacing: 4px; text-transform: uppercase; }
-
-        /* 공통 섹션 스타일 */
-        section { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 20px; box-sizing: border-box; position: relative; }
-
-        /* [섹션 1] 히어로 */
-        .hero h1 { font-size: 8vw; color: var(--orange); text-shadow: 0 0 30px rgba(255,140,0,0.5); margin: 0; line-height: 0.9; text-transform: uppercase; }
-        .hero-btns { margin-top: 50px; display: flex; gap: 30px; }
-
-        /* 레전더리 버튼 */
-        .btn-legend {
-            padding: 20px 50px; border: 2px solid var(--orange); background: transparent; color: var(--orange);
-            font-size: 1.3rem; font-weight: 900; cursor: pointer; transition: 0.4s; position: relative;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
-        .btn-legend:hover { background: var(--orange); color: black; box-shadow: 0 0 50px var(--orange); transform: scale(1.1) translateY(-5px); }
-
-        /* [섹션 2] A2 이미지 섹션 (스르륵 효과 대상) */
-        #image-section { background: rgba(0,0,0,0.5); }
-        .a2-image-container {
-            width: auto; height: 80vh; /* 화면 높이의 80%로 설정 (A2 비율 유지) */
-            aspect-ratio: 1 / 1.414; /* A2 용지 비율 (420:594) */
-            background: #111; border: 3px solid var(--orange);
-            box-shadow: 0 0 50px rgba(255,140,0,0.3);
-            overflow: hidden; opacity: 0; transform: translateY(100px); /* 초기 상태 (숨김) */
-        }
-        .a2-image-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .a2-image-container:hover img { transform: scale(1.05); }
-
-        /* [섹션 3] 작성 폼 */
-        #apply-section { background: rgba(5,5,5,0.9); }
-        .card { background: rgba(10, 10, 10, 0.9); border: 1px solid var(--orange); padding: 60px; border-radius: 20px; width: 100%; max-width: 900px; backdrop-filter: blur(10px); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-bottom: 20px; }
-        input, textarea, select { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; font-size: 1rem; }
-        input:focus, textarea:focus { border-color: var(--orange); outline: none; box-shadow: 0 0 15px var(--orange); }
-        label { color: var(--orange); font-size: 0.8rem; margin-bottom: 5px; display: block; margin-top: 15px; font-weight: bold; }
-
-        /* [섹션 4] 조회 창 */
-        #check-section { background: rgba(10,10,10,0.95); text-align: center; }
-        .status-display { margin-top: 30px; padding: 30px; background: rgba(255,140,0,0.1); border-radius: 10px; display: none; border: 1px dashed var(--orange); }
-
-        /* [섹션 5] 관리자 패널 (숨김) */
-        #admin-section { display: none; background: rgba(20,0,0,0.9); }
-
-        /* 안내 문구 & 푸터 */
-        .footer-notice { margin-top: 40px; font-size: 0.9rem; opacity: 0.7; line-height: 1.6; text-align: center; border-top: 1px solid #333; padding-top: 30px; }
-        footer { padding: 50px; text-align: center; opacity: 0.4; font-size: 0.8rem; }
-    </style>
 </head>
 <body>
-
     <nav>
-        <div class="logo">NEUROSTACK</div>
-        <div style="font-weight: bold; letter-spacing: 2px;">ENGINEERING TEAM</div>
+        <a href="index.html" class="logo">NEUROSTACK</a>
+        <div class="nav-links">
+            <a href="apply.html">SUPPORT</a>
+            <a href="check.html">STATUS</a>
+        </div>
     </nav>
     <canvas id="bg-canvas"></canvas>
 
-    <section class="hero">
-        <h1 id="main-title">NEUROSTACK<br>VISION</h1>
-        <p style="letter-spacing: 15px; opacity: 0.6; margin-top: 20px;">FUTURE ENGINEERING & GAME DEV</p>
-        <div class="hero-btns">
-            <button class="btn-legend" onclick="goTo('apply-section')">JOIN NOW</button>
-            <button class="btn-legend" style="border-color:white; color:white;" onclick="goTo('check-section')">STATUS</button>
+    <section>
+        <h1 style="font-size: 6vw; color: var(--orange);">NEUROSTACK VISION</h1>
+        <div style="margin-top: 30px;">
+            <a href="apply.html" class="btn-legend">JOIN THE TEAM</a>
         </div>
     </section>
 
     <section id="image-section">
-        <div class="a2-image-container" id="a2-poster">
-            <img src="images/poster.jpg" alt="NEUROSTACK A2 Poster">
+        <div id="a2-poster" style="width: auto; height: 80vh; aspect-ratio: 1/1.414; border: 2px solid var(--orange); opacity: 0;">
+            <img src="poster.jpg" alt="A2 Poster" style="width:100%; height:100%; object-fit:cover;">
         </div>
     </section>
 
-    <section id="apply-section">
-        <div class="card">
-            <h2 style="color: var(--orange); font-size: 2.8rem; text-align: center; margin-bottom: 40px; text-transform: uppercase;">APPLICATION</h2>
-            <form id="mainForm">
-                <div class="form-row">
-                    <div><label>학번</label><input type="text" name="studentId" placeholder="20261234" required></div>
-                    <div><label>이름</label><input type="text" name="name" placeholder="성함" required></div>
-                </div>
-                <label>전화번호</label><input type="tel" name="phone" placeholder="010-0000-0000" required>
-                
-                <label>게임 개발 경험 (긴 글)</label>
-                <textarea name="experience" style="height:150px;" placeholder="프로젝트 경험, 사용 엔진 등..."></textarea>
-                
-                <label>자기소개 / 자격증 / 가입 사유</label>
-                <textarea name="intro" style="height:120px;" placeholder="본인을 멋지게 소개해 주세요." required></textarea>
-                
-                <label>가입하면 하고 싶은 것 / AI 활용 계획</label>
-                <textarea name="aiUse" style="height:120px;" placeholder="저희는 AI 활용을 적극 권장합니다. 계획을 적어주세요." required></textarea>
-
-                <div class="footer-notice">
-                    ⚠️ <b>안내사항</b><br>
-                    3월 10일 전까지 연락을 보시고 정해진 장소에서 직접 얘기 후, 합격 여부 알려드립니다.
-                </div>
-                <button type="submit" class="btn-legend" style="width:100%; margin-top:40px; background: var(--orange); color: black;">SUBMIT APPLICATION</button>
-            </form>
-        </div>
-    </section>
-
-    <section id="check-section">
-        <div class="card check-box" style="max-width: 600px;">
-            <h2 style="color: white; font-size: 2.8rem; text-transform: uppercase;">STATUS CHECK</h2>
-            <p style="color: var(--orange); margin-top: 10px; opacity: 0.8;">학번과 이름으로 결과를 확인하세요.</p>
-            <div class="form-row" style="margin-top:50px;">
-                <input type="text" id="cId" placeholder="학번">
-                <input type="text" id="cName" placeholder="이름">
-            </div>
-            <button class="btn-legend" onclick="checkStatus()" style="margin-top: 20px; width: 100%;">조회하기</button>
-            <div id="statusRes" class="status-display"></div>
-        </div>
-    </section>
-
-    <section id="admin-section">
-        <div class="card" style="border-color: red; text-align: center;">
-            <h2 style="color: red; text-transform: uppercase;">ADMIN CONTROL</h2>
-            <label>수정할 학번 입력</label>
-            <input type="text" id="tId" style="margin-bottom: 20px;">
-            <div class="form-row">
-                <select id="sInterview"><option>면접 대상자</option><option>면접 완료</option><option>서류 검토 중</option></select>
-                <select id="sFinal"><option>심사 중</option><option>최종 합격</option><option>불합격</option></select>
-            </div>
-            <button class="btn-legend" style="border-color:red; color:red; width:100%; margin-top: 30px;" onclick="updateStatus()">DB 업데이트</button>
-        </div>
-    </section>
-
-    <footer>&copy; 2026 NEUROSTACK ENGINEERING TEAM. ALL RIGHTS RESERVED.</footer>
-
-    <script type="importmap">
-        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-    </script>
-    <script type="module">
-        import * as THREE from 'three';
-
-        // GSAP 플러그인 등록
-        gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
-
-        // --- Three.js 압도적 배경 ---
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        const geo = new THREE.TorusKnotGeometry(10, 3, 200, 32);
-        const mat = new THREE.MeshBasicMaterial({ color: 0xFF8C00, wireframe: true, transparent: true, opacity: 0.2 });
-        const mesh = new THREE.Mesh(geo, mat);
-        scene.add(mesh);
-        camera.position.z = 30;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            mesh.rotation.y += 0.005;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // --- 기능 로직 핸들러 ---
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6lfyrYcxbzOo1QYkMrjH94R7k4YlaqhfkDAwntaBTz91RzwkVGJDiHUggNgfNwT7pbA/exec';
-
-        // 섹션 이동 함수
-        window.goTo = (id) => {
-            gsap.to(window, { duration: 1.5, scrollTo: "#" + id, ease: "power4.inOut" });
-        };
-
-        // [스르륵 효과] A2 이미지 섹션 애니메이션
-        gsap.to("#a2-poster", {
-            scrollTrigger: {
-                trigger: "#image-section", // 스크롤 감지 대상 섹션
-                start: "top 80%",         // 섹션 탑이 화면 80% 지점에 오면 시작
-                toggleActions: "play none none reverse" // 들어올 때 재생, 나갈 때 반전
-            },
-            opacity: 1, y: 0, duration: 1.5, ease: "power3.out"
-        });
-
-        // 데이터 제출
-        document.getElementById('mainForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.innerText = "전송 중...";
-            const data = Object.fromEntries(new FormData(e.target).entries());
-            data.action = "submit";
-            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
-            alert("지원이 완료되었습니다. 3월 10일 전에 뵙겠습니다!");
-            e.target.reset();
-            btn.innerText = "SUBMIT APPLICATION";
-        };
-
-        // 결과 조회
-        window.checkStatus = async () => {
-            const id = document.getElementById('cId').value;
-            const name = document.getElementById('cName').value;
-            const res = await fetch(`${SCRIPT_URL}?action=check&id=${id}&name=${name}`);
-            const json = await res.json();
-            const div = document.getElementById('statusRes');
-            div.style.display = "block";
-            if(json.found) {
-                div.innerHTML = `<h3>👋 ${name}님 전형 상태</h3><p>대면 면접: <span style="color:var(--orange)">${json.interview}</span></p><p>최종 결과: <span style="color:white; font-weight:bold; font-size:1.2rem;">${json.status}</span></p>`;
-            } else {
-                div.innerText = "데이터를 찾을 수 없습니다. 학번과 이름을 확인해주세요.";
-            }
-        };
-
-        // 관리자 모드 활성화 (Ctrl + Alt + L)
-        window.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.altKey && e.key === 'l') {
-                document.getElementById('admin-section').style.display = 'flex';
-                window.goTo('admin-section');
-            }
-        });
+    <script type="module" src="script.js"></script>
+    <script>
+        // 메인 전용 스크롤 애니메이션
+        setTimeout(() => {
+            gsap.to("#a2-poster", {
+                scrollTrigger: { trigger: "#image-section", start: "top 70%" },
+                opacity: 1, y: -50, duration: 1.5
+            });
+        }, 500);
     </script>
 </body>
 </html>
