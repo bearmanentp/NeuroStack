@@ -1,44 +1,28 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>Apply | NEUROSTACK</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <nav><a href="index.html" class="logo">NEUROSTACK</a></nav>
-    <canvas id="bg-canvas"></canvas>
-    <section>
-        <div class="card">
-            <h2 style="color: var(--o); margin-bottom: 20px;">APPLICATION</h2>
-            <form id="applyForm">
-                <label>학번</label>
-                <input type="text" name="studentId" placeholder="20261234" required>
+<div class="card">
+    <h2 style="color: var(--o); margin-bottom: 20px;">NEUROSTACK APPLICATION</h2>
+    <form id="applyForm">
+        <input type="text" name="studentId" placeholder="학번" required>
+        <input type="text" name="name" placeholder="이름" required>
+        <input type="tel" name="phone" placeholder="전화번호" required>
         
-                <label>이름</label>
-                <input type="text" name="name" placeholder="홍길동" required>
+        <label>게임 개발 경험</label>
+        <textarea name="gameExp" placeholder="유니티, 언리얼 등 사용 경험이 있다면 적어주세요."></textarea>
         
-                <label>전화번호</label>
-                <input type="tel" name="phone" placeholder="010-0000-0000" required>
+        <label>자기소개</label>
+        <textarea name="intro" required></textarea>
         
-                <label>보유 자격증 (없으면 '없음')</label>
-                <input type="text" name="license" placeholder="정보처리기사, 리눅스마스터 등">
+        <label>자격증</label>
+        <input type="text" name="license" placeholder="보유 자격증 (없으면 없음)">
         
-                <label>지원 사유 및 하고 싶은 활동</label>
-                <textarea name="reason" rows="5" placeholder="뉴로스택에 지원한 이유와 동아리에서 하고 싶은 활동을 적어주세요." required></textarea>
+        <label>가입 사유</label>
+        <textarea name="reason" required></textarea>
         
-                <label>AI 도구 활용 경험</label>
-                <select name="aiUse">
-                    <option value="자주 사용">자주 사용</option>
-                    <option value="가끔 사용">가끔 사용</option>
-                    <option value="거의 안 함">거의 안 함</option>
-                </select>
+        <label>동아리에서 하고 싶은 것</label>
+        <textarea name="wishList" required></textarea>
         
-                <button type="submit">SUBMIT APPLICATION</button>
-            </form>
-        </div>
-    </section>
-    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
-    <script type="module" src="script.js"></script>
-</body>
-</html>
+        <label>AI 활용 계획</label>
+        <textarea name="aiPlan" required></textarea>
+
+        <button type="submit">SUBMIT APPLICATION</button>
+    </form>
+</div>
