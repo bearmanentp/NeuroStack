@@ -1,7 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
 // 구글 앱스 스크립트 URL
-const URL = 'https://script.google.com/macros/s/AKfycbxaxRsgUaE1fZZ_T6XglZTyMqIO6_jRwV3L931k9BFMEbQsboXdG7D6iE24U-rMzLdOpg/exec'; 
+const URL = 'https://script.google.com/macros/s/AKfycbyIKxy2MrBCEbREoMDiIeFllN4V-mri4ZXa8v2eazv2ySqgj2e1ME2FPxo0XjtFI9au9Q/exec'; 
 
 // 1. Three.js 배경: 뇌 구조(Neural Network Nodes) 스타일
 const initThree = () => {
