@@ -4,16 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEUROSTACK | MAIN</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-          }
+    <style>
+        :root { --o: #FF8C00; --dark: #0a0a0a; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--dark); color: #fff; 
+            font-family: 'Pretendard', sans-serif; overflow-x: hidden;
         }
-    </script>
+
+        /* 배경 캔버스: 화면 전체 고정 */
+        #bg-canvas { 
+            position: fixed; top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
+            z-index: 1; /* 가장 아래 */
+        }
+
+        /* 네비게이션 */
+        nav { 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; position: fixed; width: 100%; 
+            box-sizing: border-box; z-index: 100; top: 0; 
+        }
+        .logo { font: 900 1.5rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 3px; }
+        .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 700; font-size: 0.9rem; }
+
+        /* 메인 섹션 */
+        section { 
+            position: relative; z-index: 10; /* 캔버스보다 위 */
+            height: 100vh; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            text-align: center; padding: 0 20px;
+            pointer-events: none; /* 배경 터치를 위해 섹션 자체는 클릭 무시 */
+        }
+
+        /* 섹션 내 실제 클릭할 요소들만 다시 클릭 가능하게 설정 */
+        .main-content { pointer-events: auto; }
+
+        h1 { 
+            font-size: clamp(3rem, 12vw, 7rem); margin: 0; 
+            color: var(--o); text-shadow: 0 0 20px rgba(255,140,0,0.4); 
+            line-height: 1;
+        }
+        .sub-text { letter-spacing: 6px; opacity: 0.7; margin: 15px 0; font-size: 0.8rem; }
+
+        /* 면접 안내 박스 */
+        .notice-box {
+            margin-top: 20px; padding: 12px 25px;
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid var(--o); border-radius: 50px;
+            backdrop-filter: blur(10px); font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+
+        /* 버튼 */
+        .btn {
+            display: inline-block; margin-top: 30px; padding: 15px 50px;
+            border: 2px solid var(--o); color: var(--o);
+            text-decoration: none; font-weight: 900; letter-spacing: 2px;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .btn:hover { background: var(--o); color: #000; box-shadow: 0 0 20px var(--o); }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .nav-links { display: flex; }
+        }
+    </style>
 </head>
 <body>
+
     <canvas id="bg-canvas"></canvas>
 
     <nav>
@@ -25,18 +90,72 @@
     </nav>
 
     <section>
-        <h1 class="main-title">NEUROSTACK</h1>
-        <p class="sub-title">ENGINEERING THE FUTURE</p>
-        
-        <div class="notice-box">
-            📅 <strong>면접 및 합격 고지:</strong> 3월 9일 1층 AI융합실
-        </div>
+        <div class="main-content">
+            <h1>NEUROSTACK</h1>
+            <p class="sub-text">ENGINEERING THE FUTURE</p>
+            
+            <div class="notice-box">
+                📅 <strong>INTERVIEW:</strong> 3월 9일 1층 AI융합실
+            </div>
 
-        <div style="margin-top: 30px;">
             <a href="apply.html" class="btn">JOIN US</a>
         </div>
     </section>
 
-    <script type="module" src="script.js"></script>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.z = 12;
+
+        // 신경망 노드 생성
+        const count = 150;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(count * 3);
+
+        for(let i=0; i<count*3; i++) {
+            positions[i] = (Math.random() - 0.5) * 20;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const material = new THREE.PointsMaterial({
+            color: 0xFF8C00, size: 0.1, transparent: true, opacity: 0.6
+        });
+
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        // 마우스 반응
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.y += 0.002;
+            points.rotation.x += (mouseY - points.rotation.x) * 0.05;
+            points.rotation.y += (mouseX - points.rotation.y) * 0.05;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
