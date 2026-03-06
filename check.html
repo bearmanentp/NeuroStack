@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STATUS | NEUROSTACK</title>
     <style>
-        :root { --o: #FF8C00; --dark: #0a0a0a; }
+        :root { --o: #FF8C00; --dark: #0a0a0a; --red: #ff4444; }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -13,13 +13,8 @@
             font-family: 'Pretendard', sans-serif; overflow-x: hidden;
         }
 
-        /* 배경 캔버스 */
-        #bg-canvas { 
-            position: fixed; top: 0; left: 0; 
-            width: 100vw; height: 100vh; z-index: 1; 
-        }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
 
-        /* 네비게이션 */
         nav { 
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 5%; position: fixed; width: 100%; 
@@ -28,51 +23,56 @@
         .logo { font: 900 1.5rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 3px; }
         .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 700; font-size: 0.9rem; }
 
-        /* 콘텐츠 섹션 */
         section { 
             position: relative; z-index: 10; 
-            height: 100vh; display: flex; align-items: center; justify-content: center; 
-            padding: 0 20px; pointer-events: none;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; 
+            padding: 80px 20px; pointer-events: none;
         }
 
-        /* 조회 카드 디자인 */
         .card { 
             pointer-events: auto;
-            background: rgba(15, 15, 15, 0.9);
+            background: rgba(15, 15, 15, 0.95);
             border: 1px solid var(--o);
             padding: 40px; border-radius: 20px;
-            width: 100%; max-width: 400px;
+            width: 100%; max-width: 420px;
             backdrop-filter: blur(20px);
             box-shadow: 0 0 40px rgba(0,0,0,0.5);
             text-align: center;
         }
 
         h2 { color: var(--o); margin: 0 0 10px 0; font-size: 1.8rem; }
-        .desc { opacity: 0.7; font-size: 0.9rem; margin-bottom: 30px; }
+        .desc { opacity: 0.7; font-size: 0.9rem; margin-bottom: 25px; }
 
-        /* 입력창 및 버튼 */
         input {
-            width: 100%; padding: 15px; margin-bottom: 15px;
+            width: 100%; padding: 15px; margin-bottom: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid #333; color: #fff; border-radius: 8px;
             box-sizing: border-box; font-size: 1rem; text-align: center;
+            transition: 0.3s;
         }
-        input:focus { border-color: var(--o); outline: none; }
+        input:focus { border-color: var(--o); outline: none; background: rgba(255, 140, 0, 0.05); }
 
         .btn {
             width: 100%; padding: 15px;
             background: transparent; border: 2px solid var(--o);
             color: var(--o); font-weight: 900; cursor: pointer;
-            transition: 0.3s; letter-spacing: 1px;
+            transition: 0.3s; letter-spacing: 1px; margin-top: 5px;
         }
         .btn:hover { background: var(--o); color: #000; box-shadow: 0 0 20px var(--o); }
 
-        /* 결과창 내부 스타일 */
         #statusRes { margin-top: 25px; text-align: left; border-top: 1px solid #333; padding-top: 20px; }
         .res-box { animation: fadeIn 0.5s ease; }
-        .res-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .res-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
         .label { opacity: 0.6; }
         .val { color: var(--o); font-weight: bold; }
+
+        .cancel-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #444; }
+        .btn-cancel {
+            width: 100%; padding: 12px; background: transparent;
+            border: 1px solid var(--red); color: var(--red);
+            font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-cancel:hover { background: var(--red); color: #fff; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -92,9 +92,9 @@
     <section>
         <div class="card">
             <h2>STATUS CHECK</h2>
-            <p class="desc">학번을 입력하여 결과를 확인하세요.</p>
+            <p class="desc">학번을 입력하여 지원 상세 내용을 확인하세요.</p>
             
-            <input type="text" id="cId" placeholder="학번 입력 (ex. 20401)">
+            <input type="text" id="cId" placeholder="학번 입력">
             <button class="btn" onclick="checkStatus()">CHECK DETAILS</button>
 
             <div id="statusRes" style="display:none;"></div>
@@ -108,7 +108,7 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // 1. 배경 애니메이션 (메인과 동일)
+        // 1. Three.js 배경 (메인과 동일)
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -141,7 +141,16 @@
         }
         animate();
 
-        // 2. 조회 기능
+        // 2. 전화번호 하이픈 자동 생성 로직
+        const formatPhone = (val) => {
+            let v = val.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 10) v = v.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            else if (v.length > 6) v = v.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+            else if (v.length > 3) v = v.replace(/(\d{3})(\d+)/, '$1-$2');
+            return v;
+        };
+
+        // 3. 조회 및 취소 기능
         const URL = 'https://script.google.com/macros/s/AKfycbxxCwKOjSfmLEQjxdC9wRHpLF_QcAQOEpAeOvCT1aDos8-Ma8-91VdK97MOypdtNuOwdg/exec';
 
         window.checkStatus = async () => {
@@ -149,7 +158,7 @@
             if(!id) return alert("학번을 입력해주세요.");
             const resDiv = document.getElementById('statusRes');
             resDiv.style.display = 'block';
-            resDiv.innerHTML = "조회 중...";
+            resDiv.innerHTML = "<p style='text-align:center; color:var(--o);'>조회 중...</p>";
 
             try {
                 const res = await fetch(`${URL}?action=check&id=${id}`).then(r => r.json());
@@ -160,14 +169,50 @@
                             <div class="res-line"><span class="label">상태</span><span class="val">${res.status}</span></div>
                             <div class="res-line"><span class="label">면접일</span><span class="val">3월 9일</span></div>
                             <div class="res-line"><span class="label">장소</span><span class="val">1층 AI융합실</span></div>
+                            
+                            ${res.status !== '지원 취소' ? `
+                            <div class="cancel-section">
+                                <p style="font-size:0.8rem; margin-bottom:10px; opacity:0.6;">지원을 취소하려면 전화번호를 입력하세요.</p>
+                                <input type="text" id="cancelPhone" placeholder="010-0000-0000" oninput="this.value = formatPhone(this.value)">
+                                <button class="btn-cancel" onclick="cancelApp('${id}')">지원 취소하기</button>
+                            </div>` : ''}
                         </div>`;
                 } else {
-                    resDiv.innerHTML = "정보를 찾을 수 없습니다.";
+                    resDiv.innerHTML = "<p style='text-align:center;'>정보를 찾을 수 없습니다.</p>";
                 }
             } catch(e) {
-                resDiv.innerHTML = "에러가 발생했습니다.";
+                resDiv.innerHTML = "<p style='text-align:center;'>에러가 발생했습니다.</p>";
             }
         }
+
+        // 전역 하이픈 함수 할당 (inline oninput에서 사용 위함)
+        window.formatPhone = formatPhone;
+
+        window.cancelApp = async (id) => {
+            const phone = document.getElementById('cancelPhone').value;
+            if(!phone || phone.length < 12) return alert("올바른 전화번호를 입력해주세요.");
+            if(!confirm("정말로 지원을 취소하시겠습니까?")) return;
+
+            try {
+                const response = await fetch(URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ 
+                        action: 'cancel', 
+                        studentId: id,
+                        phone: phone // 보안 확인용 전화번호 전송
+                    }) 
+                }).then(r => r.text());
+
+                if(response === "CANCEL_OK") {
+                    alert("지원이 성공적으로 취소되었습니다.");
+                    location.reload();
+                } else {
+                    alert("취소 실패: 정보가 일치하지 않거나 오류가 발생했습니다.");
+                }
+            } catch(e) {
+                alert("네트워크 에러가 발생했습니다.");
+            }
+        };
 
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
