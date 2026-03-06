@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEUROSTACK | MAIN</title>
     <link rel="stylesheet" href="style.css">
-    </head>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+          }
+        }
+    </script>
+</head>
 <body>
     <canvas id="bg-canvas"></canvas>
 
@@ -18,9 +25,13 @@
     </nav>
 
     <section>
-        <h1 style="font-size: clamp(3rem, 10vw, 8rem); margin: 0; color: var(--o); text-shadow: 0 0 20px var(--o);">NEUROSTACK</h1>
-        <p style="letter-spacing: 8px; opacity: 0.7;">ENGINEERING THE FUTURE</p>
-        <div class="notice-box">⚠️ 저희 동아리는 <strong>디스코드 계정 소지</strong>가 필수입니다.</div>
+        <h1 class="main-title">NEUROSTACK</h1>
+        <p class="sub-title">ENGINEERING THE FUTURE</p>
+        
+        <div class="notice-box">
+            📅 <strong>INTERVIEW:</strong> 3월 9일 1층 AI융합실
+        </div>
+
         <div style="margin-top: 30px;">
             <a href="apply.html" class="btn">JOIN US</a>
         </div>
