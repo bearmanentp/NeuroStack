@@ -33,14 +33,16 @@
             background: rgba(10, 0, 0, 0.95);
             border: 1px solid var(--admin);
             padding: 40px; border-radius: 20px;
-            width: 100%; max-width: 550px; /* 상세 내용을 위해 폭 확대 */
+            width: 100%; max-width: 550px;
             backdrop-filter: blur(20px);
             box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+            text-align: center;
         }
 
-        h2 { color: var(--admin); margin: 0 0 20px 0; text-align: center; letter-spacing: 2px; }
+        h2 { color: var(--admin); margin: 0 0 20px 0; letter-spacing: 2px; }
         label { display: block; font-size: 0.75rem; color: var(--admin); opacity: 0.8; margin-bottom: 5px; text-align: left; font-weight: bold; }
 
+        /* 정보 그리드 */
         .info-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
             background: rgba(255, 255, 255, 0.03);
@@ -51,11 +53,13 @@
         .info-label { font-size: 0.7rem; opacity: 0.5; margin-bottom: 3px; }
         .info-val { font-size: 1rem; font-weight: 700; color: #eee; }
 
+        /* 서술형 박스 */
         .motive-box {
             text-align: left; padding: 15px; background: rgba(0,0,0,0.3);
             border-radius: 8px; border: 1px solid #333;
-            font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;
-            white-space: pre-wrap; max-height: 150px; overflow-y: auto;
+            font-size: 0.85rem; line-height: 1.6; margin-bottom: 20px;
+            white-space: pre-wrap; max-height: 200px; overflow-y: auto;
+            color: #ccc;
         }
 
         input, select {
@@ -67,7 +71,12 @@
         input:focus, select:focus { border-color: var(--admin); outline: none; }
 
         .btn-group { display: flex; gap: 10px; margin-bottom: 25px; }
-        .btn-fetch { flex: 1; padding: 12px; background: transparent; border: 1px solid #fff; color: #fff; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        .btn-fetch { 
+            flex: 1; padding: 12px; background: transparent; 
+            border: 1px solid #fff; color: #fff; cursor: pointer; 
+            border-radius: 8px; font-weight: bold; transition: 0.3s;
+        }
+        .btn-fetch:hover { background: #fff; color: #000; }
 
         .btn-update {
             width: 100%; padding: 18px; background: var(--admin);
@@ -78,6 +87,10 @@
 
         #edit-area { border-top: 2px solid #333; padding-top: 25px; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 스크롤바 커스텀 */
+        .motive-box::-webkit-scrollbar { width: 5px; }
+        .motive-box::-webkit-scrollbar-thumb { background: var(--admin); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -89,9 +102,9 @@
         <div class="card">
             <h2>DATABASE CONTROL</h2>
             
-            <label style="color:#aaa;">Target Student ID</label>
+            <label style="color:#aaa;">Target Student ID (학번)</label>
             <div class="btn-group">
-                <input type="text" id="tId" placeholder="학번 입력" style="margin:0;">
+                <input type="text" id="tId" placeholder="예: 20401" style="margin:0;">
                 <button class="btn-fetch" onclick="fetchCurrentStatus()">데이터 로드</button>
             </div>
 
@@ -107,20 +120,21 @@
                     </div>
                 </div>
 
-                <label>지원 동기 및 제출 내용</label>
-                <div class="motive-box" id="dispMotive">제출된 내용이 없습니다.</div>
+                <label>지원 상세 내용 (자기소개/경험/계획)</label>
+                <div class="motive-box" id="dispMotive">데이터를 불러오는 중입니다...</div>
                 
                 <hr style="border:0; border-top:1px solid #333; margin:25px 0;">
 
-                <label>면접 상태 변경</label>
+                <label>면접 상태 설정 (K열)</label>
                 <select id="sInterview">
                     <option value="서류 검토 중">서류 검토 중</option>
                     <option value="대상자 (일정 안내 완료)">면접 대상자</option>
                     <option value="면접 완료">면접 완료</option>
                     <option value="해당 없음">해당 없음</option>
+                    <option value="취소됨">취소됨</option>
                 </select>
 
-                <label>최종 합격 상태 변경</label>
+                <label>최종 합격 여부 (L열)</label>
                 <select id="sFinal">
                     <option value="심사 중">심사 중</option>
                     <option value="최종 합격">최종 합격 (PASS)</option>
@@ -128,7 +142,7 @@
                     <option value="지원 취소">지원 취소</option>
                 </select>
 
-                <button class="btn-update" onclick="updateStatus()">데이터베이스 동기화</button>
+                <button class="btn-update" onclick="updateStatus()">시트 데이터 동기화</button>
             </div>
         </div>
     </section>
@@ -170,34 +184,34 @@
         }
         animate();
 
-        // 2. 관리자 데이터 로드 및 업데이트 로직
-        const URL = 'https://script.google.com/macros/s/AKfycbxxCwKOjSfmLEQjxdC9wRHpLF_QcAQOEpAeOvCT1aDos8-Ma8-91VdK97MOypdtNuOwdg/exec';
+        // 2. 관리자 기능 로직
+        // 배포된 구글 앱스 스크립트 URL을 입력하세요.
+        const URL = 'https://script.google.com/macros/s/AKfycbzIynSo0BYdNd0-WfNGyhOitZ7cVwPEBQoCC3su7EnIjAbJUbpDRHXRsCcdGl66XMLdZA/exec';
 
         window.fetchCurrentStatus = async () => {
             const id = document.getElementById('tId').value;
             if(!id) return alert("학번을 입력하세요.");
             
             try {
-                // API 응답에 모든 필드(phone, motive 등)가 포함되어 있어야 함
                 const res = await fetch(`${URL}?action=check&id=${id}`).then(r => r.json());
                 
                 if(res.found) {
                     document.getElementById('edit-area').style.display = 'block';
                     
-                    // 상세 정보 화면 출력
-                    document.getElementById('dispName').innerText = res.name || '미입력';
-                    document.getElementById('dispPhone').innerText = res.phone || '미입력';
+                    // 상세 정보 출력 (이름, 전화번호, 통합 서술형 내용)
+                    document.getElementById('dispName').innerText = res.name || '정보 없음';
+                    document.getElementById('dispPhone').innerText = res.phone || '정보 없음';
                     document.getElementById('dispMotive').innerText = res.motive || '작성된 내용이 없습니다.';
                     
-                    // 상태 값 설정
-                    document.getElementById('sInterview').value = res.interview || "서류 검토 중";
-                    document.getElementById('sFinal').value = res.status || "심사 중";
+                    // 상태 값 설정 (기존 데이터와 드롭다운 동기화)
+                    document.getElementById('sInterview').value = res.interview;
+                    document.getElementById('sFinal').value = res.status;
                 } else {
-                    alert("데이터를 찾을 수 없습니다.");
+                    alert("해당 학생을 찾을 수 없습니다.");
                     document.getElementById('edit-area').style.display = 'none';
                 }
             } catch(e) {
-                alert("데이터 로드 중 오류가 발생했습니다.");
+                alert("서버 통신 실패! GAS 배포 URL과 권한을 확인하세요.");
             }
         };
 
@@ -206,13 +220,13 @@
             const interview = document.getElementById('sInterview').value;
             const status = document.getElementById('sFinal').value;
             
-            if(!confirm("해당 학생의 상태를 즉시 변경하시겠습니까?")) return;
+            if(!confirm("해당 학생의 시트 데이터를 수정하시겠습니까?")) return;
 
             try {
                 const response = await fetch(URL, {
                     method: 'POST',
                     body: JSON.stringify({
-                        action: 'adminUpdate',
+                        action: 'adminUpdate', // 백엔드 doPost 분기용
                         studentId: id,
                         interview: interview,
                         status: status
@@ -220,12 +234,12 @@
                 }).then(r => r.text());
 
                 if(response === "UPDATE_OK") {
-                    alert("성공적으로 동기화되었습니다.");
+                    alert("동기화 성공! 구글 시트가 업데이트되었습니다.");
                 } else {
-                    alert("업데이트 오류가 발생했습니다.");
+                    alert("업데이트 실패: " + response);
                 }
             } catch(e) {
-                alert("서버 연결 실패!");
+                alert("네트워크 오류가 발생했습니다.");
             }
         };
 
