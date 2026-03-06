@@ -6,81 +6,31 @@
     <title>STATUS | NEUROSTACK</title>
     <style>
         :root { --o: #FF8C00; --dark: #0a0a0a; --red: #ff4444; }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--dark); color: #fff; 
-            font-family: 'Pretendard', sans-serif; overflow-x: hidden;
-        }
-
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--dark); color: #fff; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
-
-        nav { 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 5%; position: fixed; width: 100%; 
-            box-sizing: border-box; z-index: 100; top: 0; 
-        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; position: fixed; width: 100%; box-sizing: border-box; z-index: 100; top: 0; }
         .logo { font: 900 1.5rem sans-serif; color: var(--o); text-decoration: none; letter-spacing: 3px; }
         .nav-links a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 700; font-size: 0.9rem; }
-
-        section { 
-            position: relative; z-index: 10; 
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; 
-            padding: 80px 20px; pointer-events: none;
-        }
-
-        .card { 
-            pointer-events: auto;
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid var(--o);
-            padding: 40px; border-radius: 20px;
-            width: 100%; max-width: 420px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
+        section { position: relative; z-index: 10; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 20px; pointer-events: none; }
+        .card { pointer-events: auto; background: rgba(15, 15, 15, 0.95); border: 1px solid var(--o); padding: 40px; border-radius: 20px; width: 100%; max-width: 420px; backdrop-filter: blur(20px); box-shadow: 0 0 40px rgba(0,0,0,0.5); text-align: center; }
         h2 { color: var(--o); margin: 0 0 10px 0; font-size: 1.8rem; }
         .desc { opacity: 0.7; font-size: 0.9rem; margin-bottom: 25px; }
-
-        input {
-            width: 100%; padding: 15px; margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333; color: #fff; border-radius: 8px;
-            box-sizing: border-box; font-size: 1rem; text-align: center;
-            transition: 0.3s;
-        }
+        input { width: 100%; padding: 15px; margin-bottom: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 1rem; text-align: center; transition: 0.3s; }
         input:focus { border-color: var(--o); outline: none; background: rgba(255, 140, 0, 0.05); }
-
-        .btn {
-            width: 100%; padding: 15px;
-            background: transparent; border: 2px solid var(--o);
-            color: var(--o); font-weight: 900; cursor: pointer;
-            transition: 0.3s; letter-spacing: 1px; margin-top: 5px;
-        }
+        .btn { width: 100%; padding: 15px; background: transparent; border: 2px solid var(--o); color: var(--o); font-weight: 900; cursor: pointer; transition: 0.3s; letter-spacing: 1px; margin-top: 5px; }
         .btn:hover { background: var(--o); color: #000; box-shadow: 0 0 20px var(--o); }
-
         #statusRes { margin-top: 25px; text-align: left; border-top: 1px solid #333; padding-top: 20px; }
-        .res-box { animation: fadeIn 0.5s ease; }
         .res-line { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
         .label { opacity: 0.6; }
         .val { color: var(--o); font-weight: bold; }
-
         .cancel-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #444; }
-        .btn-cancel {
-            width: 100%; padding: 12px; background: transparent;
-            border: 1px solid var(--red); color: var(--red);
-            font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
+        .btn-cancel { width: 100%; padding: 12px; background: transparent; border: 1px solid var(--red); color: var(--red); font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-cancel:hover { background: var(--red); color: #fff; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
     <canvas id="bg-canvas"></canvas>
-
     <nav>
         <a href="index.html" class="logo">NEUROSTACK</a>
         <div class="nav-links">
@@ -93,30 +43,23 @@
         <div class="card">
             <h2>STATUS CHECK</h2>
             <p class="desc">학번을 입력하여 지원 상세 내용을 확인하세요.</p>
-            
             <input type="text" id="cId" placeholder="학번 입력">
             <button class="btn" onclick="checkStatus()">CHECK DETAILS</button>
-
             <div id="statusRes" style="display:none;"></div>
         </div>
     </section>
 
-    <script type="importmap">
-        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-    </script>
-
+    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
     <script type="module">
         import * as THREE from 'three';
 
-        // 1. Three.js 배경 (메인과 동일)
+        // 1. Three.js 애니메이션 (생략 없이 유지)
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         camera.position.z = 12;
-
         const count = 150;
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(count * 3);
@@ -125,24 +68,13 @@
         const material = new THREE.PointsMaterial({ color: 0xFF8C00, size: 0.1, transparent: true, opacity: 0.6 });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
-
         let mouseX = 0, mouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-            points.rotation.y += 0.002;
-            points.rotation.x += (mouseY - points.rotation.x) * 0.05;
-            points.rotation.y += (mouseX - points.rotation.y) * 0.05;
-            renderer.render(scene, camera);
-        }
+        window.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) * 0.001; mouseY = (e.clientY - window.innerHeight / 2) * 0.001; });
+        function animate() { requestAnimationFrame(animate); points.rotation.y += 0.002; points.rotation.x += (mouseY - points.rotation.x) * 0.05; points.rotation.y += (mouseX - points.rotation.y) * 0.05; renderer.render(scene, camera); }
         animate();
 
-        // 2. 전화번호 하이픈 자동 생성 로직
-        const formatPhone = (val) => {
+        // 2. 전화번호 하이픈 로직
+        window.formatPhone = (val) => {
             let v = val.replace(/\D/g, '').slice(0, 11);
             if (v.length > 10) v = v.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
             else if (v.length > 6) v = v.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
@@ -150,9 +82,9 @@
             return v;
         };
 
-        // 3. 조회 및 취소 기능
         const URL = 'https://script.google.com/macros/s/AKfycbxxCwKOjSfmLEQjxdC9wRHpLF_QcAQOEpAeOvCT1aDos8-Ma8-91VdK97MOypdtNuOwdg/exec';
 
+        // 3. 상태 조회
         window.checkStatus = async () => {
             const id = document.getElementById('cId').value;
             if(!id) return alert("학번을 입력해주세요.");
@@ -164,7 +96,7 @@
                 const res = await fetch(`${URL}?action=check&id=${id}`).then(r => r.json());
                 if(res.found) {
                     resDiv.innerHTML = `
-                        <div class="res-box">
+                        <div class="res-box" style="animation: fadeIn 0.5s ease;">
                             <div class="res-line"><span class="label">이름</span><span class="val">${res.name}</span></div>
                             <div class="res-line"><span class="label">상태</span><span class="val">${res.status}</span></div>
                             <div class="res-line"><span class="label">면접일</span><span class="val">3월 9일</span></div>
@@ -172,9 +104,9 @@
                             
                             ${res.status !== '지원 취소' ? `
                             <div class="cancel-section">
-                                <p style="font-size:0.8rem; margin-bottom:10px; opacity:0.6;">지원을 취소하려면 전화번호를 입력하세요.</p>
-                                <input type="text" id="cancelPhone" placeholder="010-0000-0000" oninput="this.value = formatPhone(this.value)">
-                                <button class="btn-cancel" onclick="cancelApp('${id}')">지원 취소하기</button>
+                                <p style="font-size:0.8rem; margin-bottom:10px; opacity:0.6; text-align:center;">본인 확인을 위해 <b>전화번호</b>를 입력하세요.</p>
+                                <input type="text" id="cancelPhone" placeholder="010-0000-0000" oninput="this.value = window.formatPhone(this.value)">
+                                <button class="btn-cancel" onclick="cancelApp('${id}')">본인 확인 및 지원 취소</button>
                             </div>` : ''}
                         </div>`;
                 } else {
@@ -185,13 +117,14 @@
             }
         }
 
-        // 전역 하이픈 함수 할당 (inline oninput에서 사용 위함)
-        window.formatPhone = formatPhone;
-
+        // 4. 지원 취소 (번호 일치 확인 포함)
         window.cancelApp = async (id) => {
             const phone = document.getElementById('cancelPhone').value;
-            if(!phone || phone.length < 12) return alert("올바른 전화번호를 입력해주세요.");
-            if(!confirm("정말로 지원을 취소하시겠습니까?")) return;
+            if(!phone || phone.length < 12) return alert("전화번호를 정확히 입력해주세요.");
+            
+            const btn = document.querySelector('.btn-cancel');
+            btn.innerText = "확인 중...";
+            btn.disabled = true;
 
             try {
                 const response = await fetch(URL, { 
@@ -199,18 +132,25 @@
                     body: JSON.stringify({ 
                         action: 'cancel', 
                         studentId: id,
-                        phone: phone // 보안 확인용 전화번호 전송
+                        phone: phone // GAS에서 시트 데이터와 대조함
                     }) 
                 }).then(r => r.text());
 
                 if(response === "CANCEL_OK") {
-                    alert("지원이 성공적으로 취소되었습니다.");
+                    alert("본인 확인 완료. 지원이 취소되었습니다.");
                     location.reload();
+                } else if(response === "PHONE_MISMATCH") {
+                    alert("전화번호가 일치하지 않습니다. 다시 확인해주세요.");
+                    btn.innerText = "본인 확인 및 지원 취소";
+                    btn.disabled = false;
                 } else {
-                    alert("취소 실패: 정보가 일치하지 않거나 오류가 발생했습니다.");
+                    alert("취소 처리 중 오류가 발생했습니다.");
+                    btn.innerText = "본인 확인 및 지원 취소";
+                    btn.disabled = false;
                 }
             } catch(e) {
-                alert("네트워크 에러가 발생했습니다.");
+                alert("서버 연결 실패");
+                btn.disabled = false;
             }
         };
 
