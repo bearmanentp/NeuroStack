@@ -3,208 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN | NEUROSTACK</title>
+    <title>ADMIN PANEL | NEUROSTACK</title>
     <style>
-        :root { --admin: #ff0000; --dark: #0a0a0a; }
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--dark); color: #fff; 
-            font-family: 'Pretendard', sans-serif; overflow-x: hidden;
-        }
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+        :root { --main: #ff4444; --bg: #0a0a0a; --card: #151515; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Pretendard', sans-serif; }
         
-        nav { 
-            display: flex; justify-content: center; padding: 20px; 
-            position: fixed; width: 100%; z-index: 100; top: 0; 
-        }
-        .logo { font: 900 1.2rem sans-serif; color: var(--admin); text-decoration: none; letter-spacing: 5px; }
+        nav { padding: 20px 5%; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; color: var(--main); letter-spacing: 2px; text-decoration: none; }
 
-        section { 
-            position: relative; z-index: 10; min-height: 100vh; 
-            display: flex; align-items: center; justify-content: center; 
-            padding: 80px 20px; box-sizing: border-box;
-        }
+        main { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
+        input, select { flex: 1; padding: 15px; background: #222; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 1rem; }
+        .btn-primary { padding: 0 30px; background: var(--main); border: none; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; }
 
-        .card { 
-            background: rgba(10, 0, 0, 0.95); border: 1px solid var(--admin);
-            padding: 30px; border-radius: 20px; width: 100%; max-width: 600px;
-            backdrop-filter: blur(20px); box-shadow: 0 0 50px rgba(255, 0, 0, 0.15);
-            text-align: center;
-        }
+        .admin-card { background: var(--card); border: 1px solid #333; border-radius: 15px; padding: 30px; display: none; }
+        .section-title { color: var(--main); font-size: 0.8rem; font-weight: bold; margin: 25px 0 10px; display: flex; align-items: center; gap: 8px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: #333; }
 
-        h2 { color: var(--admin); margin-bottom: 25px; letter-spacing: 2px; }
+        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .info-item { background: #1a1a1a; padding: 15px; border-radius: 8px; }
+        .label { font-size: 0.75rem; color: #777; margin-bottom: 5px; }
+        .value { font-weight: bold; font-size: 1.1rem; }
 
-        /* 검색 영역 */
-        .search-group { display: flex; gap: 10px; margin-bottom: 30px; }
-        input[type="text"] { 
-            flex: 1; padding: 15px; background: rgba(255,255,255,0.05); 
-            border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 1rem;
-        }
-        .btn-fetch { 
-            padding: 0 25px; background: var(--admin); border: none; 
-            color: #fff; font-weight: bold; cursor: pointer; border-radius: 10px;
-            transition: 0.3s;
-        }
-        .btn-fetch:hover { background: #b30000; }
-
-        /* 결과 표시 영역 */
-        #edit-area { display: none; animation: fadeIn 0.5s ease; }
+        .content-box { background: #000; padding: 20px; border-radius: 8px; line-height: 1.6; white-space: pre-wrap; color: #ccc; border: 1px solid #222; }
         
-        .info-summary { 
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;
-        }
-        .sum-box { background: #151515; padding: 12px; border-radius: 8px; border: 1px solid #222; }
-        .sum-label { font-size: 0.7rem; opacity: 0.5; margin-bottom: 5px; display: block; }
-        .sum-val { font-weight: bold; font-size: 0.9rem; }
-
-        /* 상세 데이터 스크롤 박스 */
-        .detail-container { 
-            background: #000; border: 1px solid #333; border-radius: 12px;
-            text-align: left; padding: 20px; max-height: 350px; overflow-y: auto;
-            margin-bottom: 25px;
-        }
-        .detail-group { margin-bottom: 20px; }
-        .detail-label { 
-            color: var(--admin); font-size: 0.8rem; font-weight: 800; 
-            margin-bottom: 6px; display: block; border-left: 3px solid var(--admin); padding-left: 8px;
-        }
-        .detail-text { font-size: 0.92rem; line-height: 1.6; color: #ddd; white-space: pre-wrap; margin: 0; }
-
-        /* 셀렉트 및 업데이트 버튼 */
-        label { display: block; text-align: left; font-size: 0.8rem; color: #888; margin-bottom: 5px; }
-        select { 
-            width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #444; 
-            color: #fff; border-radius: 8px; margin-bottom: 15px; cursor: pointer;
-        }
-        .btn-update { 
-            width: 100%; padding: 18px; background: var(--admin); border: none; 
-            color: #fff; font-weight: 900; cursor: pointer; border-radius: 10px;
-            font-size: 1rem; transition: 0.3s;
-        }
-        .btn-update:hover { background: #ff3333; box-shadow: 0 0 20px rgba(255,0,0,0.4); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: var(--admin); border-radius: 10px; }
+        .control-group { margin-top: 40px; padding-top: 30px; border-top: 1px solid #333; }
+        .status-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .btn-save { width: 100%; padding: 20px; background: var(--main); border: none; color: #fff; font-weight: 900; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-save:hover { background: #ff2222; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 68, 68, 0.3); }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
-    <nav><a href="index.html" class="logo">NEUROSTACK ADMIN</a></nav>
+<nav><a href="#" class="logo">NEUROSTACK ADMIN</a></nav>
 
-    <section>
-        <div class="card">
-            <h2>DB CONTROL PANEL</h2>
-            
-            <div class="search-group">
-                <input type="text" id="tId" placeholder="조회할 학번 입력">
-                <button class="btn-fetch" onclick="fetchCurrentStatus()">LOAD</button>
-            </div>
+<main>
+    <div class="search-box">
+        <input type="text" id="targetId" placeholder="조회할 학번 입력">
+        <button class="btn-primary" onclick="loadData()">조회</button>
+    </div>
 
-            <div id="edit-area">
-                <div class="info-summary">
-                    <div class="sum-box"><span class="sum-label">이름</span><span class="sum-val" id="dName">-</span></div>
-                    <div class="sum-box"><span class="sum-label">연락처</span><span class="sum-val" id="dPhone">-</span></div>
-                    <div class="sum-box"><span class="sum-label">제출시간</span><span class="sum-val" id="dTime">-</span></div>
-                </div>
-
-                <div class="detail-container" id="dDetails">
-                    </div>
-
-                <hr style="border:0; border-top:1px solid #333; margin-bottom:20px;">
-
-                <label>면접 상태 변경</label>
-                <select id="sInterview">
-                    <option value="서류 검토 중">서류 검토 중</option>
-                    <option value="대상자 (일정 안내 완료)">면접 대상자</option>
-                    <option value="면접 완료">면접 완료</option>
-                    <option value="해당 없음">해당 없음</option>
-                </select>
-
-                <label>최종 합격 상태 변경</label>
-                <select id="sFinal">
-                    <option value="심사 중">심사 중</option>
-                    <option value="최종 합격">최종 합격 (PASS)</option>
-                    <option value="불합격">불합격 (FAIL)</option>
-                    <option value="지원 취소">지원 취소</option>
-                </select>
-
-                <button class="btn-update" onclick="updateStatus()">DATABASE SYNC</button>
-            </div>
+    <div id="adminCard" class="admin-card">
+        <div class="grid-info">
+            <div class="info-item"><div class="label">이름</div><div class="value" id="resName">-</div></div>
+            <div class="info-item"><div class="label">연락처</div><div class="value" id="resPhone">-</div></div>
+            <div class="info-item"><div class="label">제출 시간</div><div class="value" id="resTime">-</div></div>
+            <div class="info-item"><div class="label">학번</div><div class="value" id="resId">-</div></div>
         </div>
-    </section>
 
-    <script type="module">
-        import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+        <div class="section-title">1. 게임 개발 경험</div>
+        <div class="content-box" id="resGameExp"></div>
 
-        // 배경 애니메이션 생략 (기본 Three.js 배경 로직과 동일)
+        <div class="section-title">2. 자기소개</div>
+        <div class="content-box" id="resIntro"></div>
+
+        <div class="section-title">3. 자격증 및 기술</div>
+        <div class="content-box" id="resLicense"></div>
+
+        <div class="section-title">4. 가입 사유</div>
+        <div class="content-box" id="resReason"></div>
+
+        <div class="section-title">5. 하고 싶은 활동</div>
+        <div class="content-box" id="resWish"></div>
+
+        <div class="section-title">6. AI 활용 계획</div>
+        <div class="content-box" id="resAi"></div>
+
+        <div class="control-group">
+            <div class="status-selects">
+                <div>
+                    <div class="label">면접 단계</div>
+                    <select id="selInterview">
+                        <option value="서류 검토 중">서류 검토 중</option>
+                        <option value="대상자 (일정 안내 완료)">면접 대상자</option>
+                        <option value="면접 완료">면접 완료</option>
+                        <option value="해당 없음">해당 없음</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="label">최종 상태</div>
+                    <select id="selStatus">
+                        <option value="심사 중">심사 중</option>
+                        <option value="최종 합격">최종 합격</option>
+                        <option value="불합격">불합격</option>
+                        <option value="지원 취소">지원 취소</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-save" onclick="updateData()">시트 데이터 업데이트</button>
+        </div>
+    </div>
+</main>
+
+<script>
+    const APP_URL = '여기에_배포된_GAS_URL_입력';
+
+    async function loadData() {
+        const id = document.getElementById('targetId').value;
+        if(!id) return alert("학번을 입력하세요.");
         
-        const URL = 'https://script.google.com/macros/s/AKfycbxaxRsgUaE1fZZ_T6XglZTyMqIO6_jRwV3L931k9BFMEbQsboXdG7D6iE24U-rMzLdOpg/exec';
-
-        window.fetchCurrentStatus = async () => {
-            const id = document.getElementById('tId').value;
-            if(!id) return alert("학번을 입력하세요.");
-            
-            try {
-                const res = await fetch(`${URL}?action=check&id=${id}`).then(r => r.json());
+        const card = document.getElementById('adminCard');
+        try {
+            const res = await fetch(`${APP_URL}?action=check&id=${id}`).then(r => r.json());
+            if(res.found) {
+                card.style.display = 'block';
+                document.getElementById('resName').innerText = res.name;
+                document.getElementById('resPhone').innerText = res.phone;
+                document.getElementById('resTime').innerText = res.time;
+                document.getElementById('resId').innerText = res.studentId;
                 
-                if(res.found) {
-                    document.getElementById('edit-area').style.display = 'block';
-                    document.getElementById('dName').innerText = res.name;
-                    document.getElementById('dPhone').innerText = res.phone;
-                    document.getElementById('dTime').innerText = res.submitTime;
-
-                    // 백엔드에서 온 모든 필드를 상세 영역에 표시
-                    const detailsHtml = `
-                        <div class="detail-group"><span class="detail-label">게임 개발 경험</span><p class="detail-text">${res.gameExp || '없음'}</p></div>
-                        <div class="detail-group"><span class="detail-label">자기소개</span><p class="detail-text">${res.intro || '없음'}</p></div>
-                        <div class="detail-group"><span class="detail-label">보유 자격증</span><p class="detail-text">${res.license || '없음'}</p></div>
-                        <div class="detail-group"><span class="detail-label">가입 사유</span><p class="detail-text">${res.reason || '없음'}</p></div>
-                        <div class="detail-group"><span class="detail-label">활동 기대사항</span><p class="detail-text">${res.wishList || '없음'}</p></div>
-                        <div class="detail-group"><span class="detail-label">AI 활용 계획</span><p class="detail-text">${res.aiPlan || '없음'}</p></div>
-                    `;
-                    document.getElementById('dDetails').innerHTML = detailsHtml;
-
-                    // 셀렉트 박스 동기화
-                    document.getElementById('sInterview').value = res.interview;
-                    document.getElementById('sFinal').value = res.status;
-                } else {
-                    alert("정보를 찾을 수 없습니다.");
-                    document.getElementById('edit-area').style.display = 'none';
-                }
-            } catch(e) {
-                alert("서버 연결 실패!");
+                // 모든 서술형 필드 주입
+                document.getElementById('resGameExp').innerText = res.gameExp || '없음';
+                document.getElementById('resIntro').innerText = res.intro || '없음';
+                document.getElementById('resLicense').innerText = res.license || '없음';
+                document.getElementById('resReason').innerText = res.reason || '없음';
+                document.getElementById('resWish').innerText = res.wishList || '없음';
+                document.getElementById('resAi').innerText = res.aiPlan || '없음';
+                
+                // 셀렉트 박스 동기화
+                document.getElementById('selInterview').value = res.interview;
+                document.getElementById('selStatus').value = res.status;
+            } else {
+                alert("해당 학번의 지원서를 찾을 수 없습니다.");
+                card.style.display = 'none';
             }
-        };
+        } catch(e) { alert("연결 실패"); }
+    }
 
-        window.updateStatus = async () => {
-            const id = document.getElementById('tId').value;
-            const interview = document.getElementById('sInterview').value;
-            const status = document.getElementById('sFinal').value;
-            
-            if(!confirm("시트 데이터를 즉시 수정하시겠습니까?")) return;
+    async function updateData() {
+        const id = document.getElementById('targetId').value;
+        const interview = document.getElementById('selInterview').value;
+        const status = document.getElementById('selStatus').value;
+        
+        if(!confirm("수정 사항을 구글 시트에 반영하시겠습니까?")) return;
 
-            try {
-                const res = await fetch(URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'adminUpdate',
-                        studentId: id,
-                        interview: interview,
-                        status: status
-                    })
-                }).then(r => r.text());
+        try {
+            const res = await fetch(APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'adminUpdate',
+                    studentId: id,
+                    interview: interview,
+                    status: status
+                })
+            }).then(r => r.text());
 
-                if(res === "UPDATE_OK") {
-                    alert("동기화가 완료되었습니다.");
-                } else {
-                    alert("업데이트 실패: " + res);
-                }
-            } catch(e) {
-                alert("네트워크 오류 발생!");
-            }
-        };
-    </script>
+            if(res === "UPDATE_OK") alert("성공적으로 업데이트되었습니다.");
+            else alert("오류 발생: " + res);
+        } catch(e) { alert("서버 통신 오류"); }
+    }
+</script>
 </body>
 </html>
