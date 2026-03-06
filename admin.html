@@ -2,28 +2,88 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN | NEUROSTACK</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="importmap"> { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } } </script>
+    <style>
+        :root { --o: #FF8C00; --dark: #0a0a0a; --admin: #ff0000; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--dark); color: #fff; 
+            font-family: 'Pretendard', sans-serif; overflow-x: hidden;
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+
+        nav { 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; position: fixed; width: 100%; 
+            box-sizing: border-box; z-index: 100; top: 0; 
+        }
+        .logo { font: 900 1.5rem sans-serif; color: var(--admin); text-decoration: none; letter-spacing: 3px; }
+        
+        section { 
+            position: relative; z-index: 10; 
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; 
+            padding: 80px 20px; pointer-events: none;
+        }
+
+        .card { 
+            pointer-events: auto;
+            background: rgba(10, 0, 0, 0.95);
+            border: 1px solid var(--admin);
+            padding: 40px; border-radius: 20px;
+            width: 100%; max-width: 450px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+        }
+
+        h2 { color: var(--admin); margin: 0 0 20px 0; text-align: center; letter-spacing: 2px; }
+        label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 8px; text-align: left; }
+
+        input, select {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #444; color: #fff; border-radius: 8px;
+            box-sizing: border-box; font-size: 1rem;
+        }
+        input:focus, select:focus { border-color: var(--admin); outline: none; }
+
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-fetch { flex: 1; padding: 12px; background: transparent; border: 1px solid #fff; color: #fff; cursor: pointer; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .btn-fetch:hover { background: #fff; color: #000; }
+
+        .btn-update {
+            width: 100%; padding: 15px; background: var(--admin);
+            border: none; color: #fff; font-weight: 900; cursor: pointer;
+            border-radius: 8px; transition: 0.3s; font-size: 1rem;
+        }
+        .btn-update:hover { background: #b30000; box-shadow: 0 0 20px var(--admin); }
+
+        #edit-area { border-top: 1px solid #333; padding-top: 20px; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
-    <nav><a href="index.html" class="logo">NEUROSTACK ADMIN</a></nav>
+
     <canvas id="bg-canvas"></canvas>
 
+    <nav><a href="index.html" class="logo">NEUROSTACK ADMIN</a></nav>
+
     <section>
-        <div class="card" style="border-color: red;">
-            <h2 style="color: red; margin-bottom: 30px;">DATABASE CONTROL</h2>
+        <div class="card">
+            <h2>DATABASE CONTROL</h2>
             
             <label>관리 대상 학번 입력</label>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="tId" placeholder="예: 20261234" style="margin:0;">
-                <button class="btn" style="border-color: #fff; color: #fff; padding: 0 20px;" onclick="fetchCurrentStatus()">불러오기</button>
+            <div class="btn-group">
+                <input type="text" id="tId" placeholder="예: 20401" style="margin:0;">
+                <button class="btn-fetch" onclick="fetchCurrentStatus()">불러오기</button>
             </div>
 
-            <div id="edit-area" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; display: none;">
-                <p id="targetName" style="font-weight: bold; color: var(--o); margin-bottom: 20px;"></p>
+            <div id="edit-area" style="display: none;">
+                <p id="targetName" style="font-weight: bold; color: var(--o); margin-bottom: 20px; text-align: center;"></p>
                 
-                <label>대면 면접 여부 설정</label>
+                <label>면접 상태 설정</label>
                 <select id="sInterview">
                     <option value="서류 검토 중">서류 검토 중</option>
                     <option value="대상자 (일정 안내 완료)">면접 대상자</option>
@@ -31,18 +91,115 @@
                     <option value="해당 없음">해당 없음</option>
                 </select>
 
-                <label>최종 합격 여부 설정</label>
+                <label>최종 상태 설정</label>
                 <select id="sFinal">
                     <option value="심사 중">심사 중</option>
                     <option value="최종 합격">최종 합격 (PASS)</option>
                     <option value="불합격">불합격 (FAIL)</option>
+                    <option value="지원 취소">지원 취소</option>
                 </select>
 
-                <button class="btn" style="width: 100%; background: red; color: white; border: none; margin-top: 20px;" onclick="updateStatus()">DB 업데이트 실행</button>
+                <button class="btn-update" onclick="updateStatus()">DB 업데이트 실행</button>
             </div>
         </div>
     </section>
 
-    <script type="module" src="script.js"></script>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 1. Three.js 배경 (관리자용은 붉은색 노드 적용)
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        camera.position.z = 12;
+
+        const count = 150;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(count * 3);
+        for(let i=0; i<count*3; i++) positions[i] = (Math.random() - 0.5) * 20;
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ color: 0xff0000, size: 0.12, transparent: true, opacity: 0.5 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.y += 0.001;
+            points.rotation.x += (mouseY - points.rotation.x) * 0.05;
+            points.rotation.y += (mouseX - points.rotation.y) * 0.05;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // 2. 관리자 기능 로직
+        const URL = 'https://script.google.com/macros/s/AKfycbxxCwKOjSfmLEQjxdC9wRHpLF_QcAQOEpAeOvCT1aDos8-Ma8-91VdK97MOypdtNuOwdg/exec';
+
+        // 전역 함수로 등록
+        window.fetchCurrentStatus = async () => {
+            const id = document.getElementById('tId').value;
+            if(!id) return alert("학번을 입력하세요.");
+            
+            try {
+                const res = await fetch(`${URL}?action=check&id=${id}`).then(r => r.json());
+                if(res.found) {
+                    document.getElementById('edit-area').style.display = 'block';
+                    document.getElementById('targetName').innerText = `${res.name} (${id}) 관리 중`;
+                    document.getElementById('sInterview').value = res.interview || "서류 검토 중";
+                    document.getElementById('sFinal').value = res.status || "심사 중";
+                } else {
+                    alert("해당 학번의 데이터를 찾을 수 없습니다.");
+                }
+            } catch(e) {
+                alert("불러오기 실패!");
+            }
+        };
+
+        window.updateStatus = async () => {
+            const id = document.getElementById('tId').value;
+            const interview = document.getElementById('sInterview').value;
+            const status = document.getElementById('sFinal').value;
+            
+            if(!confirm("DB 데이터를 수정하시겠습니까?")) return;
+
+            try {
+                const response = await fetch(URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'adminUpdate', // GAS 쪽에서 처리할 액션명
+                        studentId: id,
+                        interview: interview,
+                        status: status
+                    })
+                }).then(r => r.text());
+
+                if(response === "UPDATE_OK") {
+                    alert("성공적으로 업데이트되었습니다.");
+                } else {
+                    alert("업데이트 오류 발생");
+                }
+            } catch(e) {
+                alert("네트워크 오류!");
+            }
+        };
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
